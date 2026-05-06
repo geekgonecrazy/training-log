@@ -1,0 +1,35 @@
+# Keep the build context small. Anything not needed inside `docker build` lives here.
+.git
+.github
+.idea
+.vscode
+
+# Locally built artifacts — the Dockerfile rebuilds everything from source.
+bin/
+data/
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Frontend build outputs — frontend stage rebuilds these.
+web/node_modules
+web/.svelte-kit
+web/build
+web/dist
+
+# Embedded frontend placeholder — the build stage overwrites webfs/dist anyway.
+webfs/dist
+
+# Local secrets / configs.
+.env
+.env.local
+config.yaml
+
+# OS junk.
+.DS_Store
+
+# Docs / repo housekeeping that don't need to ship.
+README.md
+*.md
+LICENSE
