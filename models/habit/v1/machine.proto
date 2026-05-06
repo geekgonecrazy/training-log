@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package habit.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Machine {
+  int64 id = 1;
+  string name = 2;
+  string location = 3;
+  string notes = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+message ListMachinesRequest {}
+message ListMachinesResponse {
+  repeated Machine machines = 1;
+}
+
+message GetMachineRequest { int64 id = 1; }
+message GetMachineResponse { Machine machine = 1; }
+
+message CreateMachineRequest {
+  string name = 1;
+  string location = 2;
+  string notes = 3;
+}
+message CreateMachineResponse { Machine machine = 1; }
+
+message UpdateMachineRequest {
+  int64 id = 1;
+  string name = 2;
+  string location = 3;
+  string notes = 4;
+}
+message UpdateMachineResponse { Machine machine = 1; }
+
+message DeleteMachineRequest { int64 id = 1; }
+message DeleteMachineResponse {}

@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package habit.v1;
+
+import "google/api/annotations.proto";
+import "habit/v1/auth.proto";
+import "habit/v1/exercise.proto";
+import "habit/v1/machine.proto";
+import "habit/v1/report.proto";
+import "habit/v1/routine.proto";
+import "habit/v1/session.proto";
+
+service AuthService {
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = { post: "/v1/auth/register" body: "*" };
+  }
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = { post: "/v1/auth/login" body: "*" };
+  }
+  rpc Refresh(RefreshRequest) returns (RefreshResponse) {
+    option (google.api.http) = { post: "/v1/auth/refresh" body: "*" };
+  }
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {
+    option (google.api.http) = { post: "/v1/auth/logout" body: "*" };
+  }
+  rpc Me(MeRequest) returns (MeResponse) {
+    option (google.api.http) = { get: "/v1/auth/me" };
+  }
+}
+
+service HabitService {
+  // Machines
+  rpc ListMachines(ListMachinesRequest) returns (ListMachinesResponse) {
+    option (google.api.http) = { get: "/v1/machines" };
+  }
+  rpc GetMachine(GetMachineRequest) returns (GetMachineResponse) {
+    option (google.api.http) = { get: "/v1/machines/{id}" };
+  }
+  rpc CreateMachine(CreateMachineRequest) returns (CreateMachineResponse) {
+    option (google.api.http) = { post: "/v1/machines" body: "*" };
+  }
+  rpc UpdateMachine(UpdateMachineRequest) returns (UpdateMachineResponse) {
+    option (google.api.http) = { put: "/v1/machines/{id}" body: "*" };
+  }
+  rpc DeleteMachine(DeleteMachineRequest) returns (DeleteMachineResponse) {
+    option (google.api.http) = { delete: "/v1/machines/{id}" };
+  }
+
+  // Exercises
+  rpc ListExercises(ListExercisesRequest) returns (ListExercisesResponse) {
+    option (google.api.http) = { get: "/v1/exercises" };
+  }
+  rpc GetExercise(GetExerciseRequest) returns (GetExerciseResponse) {
+    option (google.api.http) = { get: "/v1/exercises/{id}" };
+  }
+  rpc CreateExercise(CreateExerciseRequest) returns (CreateExerciseResponse) {
+    option (google.api.http) = { post: "/v1/exercises" body: "*" };
+  }
+  rpc UpdateExercise(UpdateExerciseRequest) returns (UpdateExerciseResponse) {
+    option (google.api.http) = { put: "/v1/exercises/{id}" body: "*" };
+  }
+  rpc ArchiveExercise(ArchiveExerciseRequest) returns (ArchiveExerciseResponse) {
+    option (google.api.http) = { delete: "/v1/exercises/{id}" };
+  }
+
+  // Routines
+  rpc ListRoutines(ListRoutinesRequest) returns (ListRoutinesResponse) {
+    option (google.api.http) = { get: "/v1/routines" };
+  }
+  rpc GetRoutine(GetRoutineRequest) returns (GetRoutineResponse) {
+    option (google.api.http) = { get: "/v1/routines/{id}" };
+  }
+  rpc CreateRoutine(CreateRoutineRequest) returns (CreateRoutineResponse) {
+    option (google.api.http) = { post: "/v1/routines" body: "*" };
+  }
+  rpc UpdateRoutine(UpdateRoutineRequest) returns (UpdateRoutineResponse) {
+    option (google.api.http) = { put: "/v1/routines/{id}" body: "*" };
+  }
+  rpc ArchiveRoutine(ArchiveRoutineRequest) returns (ArchiveRoutineResponse) {
+    option (google.api.http) = { delete: "/v1/routines/{id}" };
+  }
+  rpc StartRoutine(StartRoutineRequest) returns (StartRoutineResponse) {
+    option (google.api.http) = { post: "/v1/routines/{routine_id}:start" body: "*" };
+  }
+  rpc EndRoutineRun(EndRoutineRunRequest) returns (EndRoutineRunResponse) {
+    option (google.api.http) = { post: "/v1/routine-runs/{run_id}:end" body: "*" };
+  }
+
+  // Sessions
+  rpc LogSession(LogSessionRequest) returns (LogSessionResponse) {
+    option (google.api.http) = { post: "/v1/sessions" body: "*" };
+  }
+  rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {
+    option (google.api.http) = { get: "/v1/sessions" };
+  }
+
+  // Reports + progression
+  rpc GetWeeklyReport(GetWeeklyReportRequest) returns (GetWeeklyReportResponse) {
+    option (google.api.http) = { get: "/v1/reports/weekly" };
+  }
+  rpc GetMonthlyReport(GetMonthlyReportRequest) returns (GetMonthlyReportResponse) {
+    option (google.api.http) = { get: "/v1/reports/monthly" };
+  }
+  rpc ListProgressionSuggestions(ListProgressionSuggestionsRequest) returns (ListProgressionSuggestionsResponse) {
+    option (google.api.http) = { get: "/v1/progression-suggestions" };
+  }
+}

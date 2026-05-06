@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package habit.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message User {
+  int64 id = 1;
+  string email = 2;
+  string name = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message RegisterRequest {
+  string email = 1;
+  string password = 2;
+  string name = 3;
+}
+message RegisterResponse {
+  User user = 1;
+}
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+  bool remember_me = 3;
+}
+message LoginResponse {
+  User user = 1;
+}
+
+message RefreshRequest {}
+message RefreshResponse {}
+
+message LogoutRequest {}
+message LogoutResponse {}
+
+message MeRequest {}
+message MeResponse {
+  User user = 1;
+}

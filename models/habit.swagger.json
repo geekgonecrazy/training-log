@@ -1,0 +1,1723 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "habit/v1/auth.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "AuthService"
+    },
+    {
+      "name": "HabitService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/auth/login": {
+      "post": {
+        "operationId": "AuthService_Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LoginResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthService_Logout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LogoutResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LogoutRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/v1/auth/me": {
+      "get": {
+        "operationId": "AuthService_Me",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1MeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/v1/auth/refresh": {
+      "post": {
+        "operationId": "AuthService_Refresh",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RefreshResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RefreshRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/v1/auth/register": {
+      "post": {
+        "operationId": "AuthService_Register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1RegisterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1RegisterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "AuthService"
+        ]
+      }
+    },
+    "/v1/exercises": {
+      "get": {
+        "summary": "Exercises",
+        "operationId": "HabitService_ListExercises",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListExercisesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "includeArchived",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "post": {
+        "operationId": "HabitService_CreateExercise",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateExerciseResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateExerciseRequest"
+            }
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/exercises/{id}": {
+      "get": {
+        "operationId": "HabitService_GetExercise",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetExerciseResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "delete": {
+        "operationId": "HabitService_ArchiveExercise",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ArchiveExerciseResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "put": {
+        "operationId": "HabitService_UpdateExercise",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateExerciseResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HabitServiceUpdateExerciseBody"
+            }
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/machines": {
+      "get": {
+        "summary": "Machines",
+        "operationId": "HabitService_ListMachines",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListMachinesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "post": {
+        "operationId": "HabitService_CreateMachine",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateMachineResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateMachineRequest"
+            }
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/machines/{id}": {
+      "get": {
+        "operationId": "HabitService_GetMachine",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMachineResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "delete": {
+        "operationId": "HabitService_DeleteMachine",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteMachineResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "put": {
+        "operationId": "HabitService_UpdateMachine",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateMachineResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HabitServiceUpdateMachineBody"
+            }
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/progression-suggestions": {
+      "get": {
+        "operationId": "HabitService_ListProgressionSuggestions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListProgressionSuggestionsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/reports/monthly": {
+      "get": {
+        "operationId": "HabitService_GetMonthlyReport",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMonthlyReportResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "month",
+            "description": "YYYY-MM. If empty, current month.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/reports/weekly": {
+      "get": {
+        "summary": "Reports + progression",
+        "operationId": "HabitService_GetWeeklyReport",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetWeeklyReportResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "week",
+            "description": "ISO week, e.g. \"2026-W18\". If empty, current week.",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/routine-runs/{runId}:end": {
+      "post": {
+        "operationId": "HabitService_EndRoutineRun",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1EndRoutineRunResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "runId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HabitServiceEndRoutineRunBody"
+            }
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/routines": {
+      "get": {
+        "summary": "Routines",
+        "operationId": "HabitService_ListRoutines",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListRoutinesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "includeArchived",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "post": {
+        "operationId": "HabitService_CreateRoutine",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateRoutineResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateRoutineRequest"
+            }
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/routines/{id}": {
+      "get": {
+        "operationId": "HabitService_GetRoutine",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetRoutineResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "delete": {
+        "operationId": "HabitService_ArchiveRoutine",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ArchiveRoutineResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "put": {
+        "operationId": "HabitService_UpdateRoutine",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateRoutineResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HabitServiceUpdateRoutineBody"
+            }
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/routines/{routineId}:start": {
+      "post": {
+        "operationId": "HabitService_StartRoutine",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1StartRoutineResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "routineId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HabitServiceStartRoutineBody"
+            }
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    },
+    "/v1/sessions": {
+      "get": {
+        "operationId": "HabitService_ListSessions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1ListSessionsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "exerciseId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "routineRunId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "post": {
+        "summary": "Sessions",
+        "operationId": "HabitService_LogSession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1LogSessionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1LogSessionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "HabitServiceEndRoutineRunBody": {
+      "type": "object"
+    },
+    "HabitServiceStartRoutineBody": {
+      "type": "object"
+    },
+    "HabitServiceUpdateExerciseBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/v1ExerciseKind"
+        },
+        "machineId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "goalCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "goalDurationSeconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "goalSets": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "goalWeightLb": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "HabitServiceUpdateMachineBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "HabitServiceUpdateRoutineBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "exerciseIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          },
+          "description": "If non-empty, replaces the routine items in the given order."
+        },
+        "alternateSets": {
+          "type": "boolean"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1ArchiveExerciseResponse": {
+      "type": "object"
+    },
+    "v1ArchiveRoutineResponse": {
+      "type": "object"
+    },
+    "v1CreateExerciseRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/v1ExerciseKind"
+        },
+        "machineId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "goalCount": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "goalDurationSeconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "goalSets": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "goalWeightLb": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "v1CreateExerciseResponse": {
+      "type": "object",
+      "properties": {
+        "exercise": {
+          "$ref": "#/definitions/v1Exercise"
+        }
+      }
+    },
+    "v1CreateMachineRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CreateMachineResponse": {
+      "type": "object",
+      "properties": {
+        "machine": {
+          "$ref": "#/definitions/v1Machine"
+        }
+      }
+    },
+    "v1CreateRoutineRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "exerciseIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "int64"
+          },
+          "description": "Ordered list of exercise IDs that compose the routine."
+        },
+        "alternateSets": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1CreateRoutineResponse": {
+      "type": "object",
+      "properties": {
+        "routine": {
+          "$ref": "#/definitions/v1Routine"
+        }
+      }
+    },
+    "v1DeleteMachineResponse": {
+      "type": "object"
+    },
+    "v1Difficulty": {
+      "type": "string",
+      "enum": [
+        "DIFFICULTY_UNSPECIFIED",
+        "DIFFICULTY_EASY",
+        "DIFFICULTY_MODERATE",
+        "DIFFICULTY_HARD",
+        "DIFFICULTY_VERY_HARD",
+        "DIFFICULTY_FAILED"
+      ],
+      "default": "DIFFICULTY_UNSPECIFIED"
+    },
+    "v1EndRoutineRunResponse": {
+      "type": "object",
+      "properties": {
+        "run": {
+          "$ref": "#/definitions/v1RoutineRun"
+        }
+      }
+    },
+    "v1Exercise": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/v1ExerciseKind"
+        },
+        "machineId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "goalCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "For COUNTED and WEIGHTED: target reps per set."
+        },
+        "goalDurationSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "description": "For TIMED: target seconds per set."
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "archivedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "goalSets": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Number of sets to perform per session. NULL or 0 means \"1 set\"."
+        },
+        "goalWeightLb": {
+          "type": "number",
+          "format": "double",
+          "description": "For WEIGHTED only: target weight in pounds."
+        }
+      }
+    },
+    "v1ExerciseKind": {
+      "type": "string",
+      "enum": [
+        "EXERCISE_KIND_UNSPECIFIED",
+        "EXERCISE_KIND_TIMED",
+        "EXERCISE_KIND_COUNTED",
+        "EXERCISE_KIND_LOGGED",
+        "EXERCISE_KIND_WEIGHTED"
+      ],
+      "default": "EXERCISE_KIND_UNSPECIFIED",
+      "title": "- EXERCISE_KIND_TIMED: planks: timer + beep + difficulty\n - EXERCISE_KIND_COUNTED: push-ups: count up + confirm + difficulty\n - EXERCISE_KIND_LOGGED: kata: simple done + optional note\n - EXERCISE_KIND_WEIGHTED: gym: sets/reps/weight + difficulty"
+    },
+    "v1ExerciseRollup": {
+      "type": "object",
+      "properties": {
+        "exerciseId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "exerciseName": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/v1ExerciseKind"
+        },
+        "sessionsTotal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sessionsCompleted": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sessionsSkipped": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "sessionsFailed": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "totalCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Sum of count_completed across the period (counted exercises)."
+        },
+        "totalDurationSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Sum of duration_seconds across the period (timed exercises)."
+        },
+        "avgDifficulty": {
+          "type": "number",
+          "format": "double",
+          "description": "Mean numeric difficulty (1=Easy..5=Failed) over completed sessions.\n0 if no completed sessions had a difficulty rating."
+        }
+      }
+    },
+    "v1GetExerciseResponse": {
+      "type": "object",
+      "properties": {
+        "exercise": {
+          "$ref": "#/definitions/v1Exercise"
+        }
+      }
+    },
+    "v1GetMachineResponse": {
+      "type": "object",
+      "properties": {
+        "machine": {
+          "$ref": "#/definitions/v1Machine"
+        }
+      }
+    },
+    "v1GetMonthlyReportResponse": {
+      "type": "object",
+      "properties": {
+        "report": {
+          "$ref": "#/definitions/v1PeriodReport"
+        }
+      }
+    },
+    "v1GetRoutineResponse": {
+      "type": "object",
+      "properties": {
+        "routine": {
+          "$ref": "#/definitions/v1Routine"
+        }
+      }
+    },
+    "v1GetWeeklyReportResponse": {
+      "type": "object",
+      "properties": {
+        "report": {
+          "$ref": "#/definitions/v1PeriodReport"
+        }
+      }
+    },
+    "v1ListExercisesResponse": {
+      "type": "object",
+      "properties": {
+        "exercises": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Exercise"
+          }
+        }
+      }
+    },
+    "v1ListMachinesResponse": {
+      "type": "object",
+      "properties": {
+        "machines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Machine"
+          }
+        }
+      }
+    },
+    "v1ListProgressionSuggestionsResponse": {
+      "type": "object",
+      "properties": {
+        "suggestions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ProgressionSuggestion"
+          }
+        }
+      }
+    },
+    "v1ListRoutinesResponse": {
+      "type": "object",
+      "properties": {
+        "routines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Routine"
+          }
+        }
+      }
+    },
+    "v1ListSessionsResponse": {
+      "type": "object",
+      "properties": {
+        "sessions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Session"
+          }
+        }
+      }
+    },
+    "v1LogSessionRequest": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "description": "Idempotency key from frontend. Required."
+        },
+        "exerciseId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "routineRunId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/v1SessionStatus"
+        },
+        "countCompleted": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "countGoal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "durationSeconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "difficulty": {
+          "$ref": "#/definitions/v1Difficulty"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "setIndex": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "setTotal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "weightLb": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "v1LogSessionResponse": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "$ref": "#/definitions/v1Session"
+        }
+      }
+    },
+    "v1LoginRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "rememberMe": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1LoginResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/v1User"
+        }
+      }
+    },
+    "v1LogoutRequest": {
+      "type": "object"
+    },
+    "v1LogoutResponse": {
+      "type": "object"
+    },
+    "v1Machine": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1MeResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/v1User"
+        }
+      }
+    },
+    "v1PeriodReport": {
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "string",
+          "title": "Period identifier:\n - weekly: ISO week, e.g. \"2026-W18\"\n - monthly: \"2026-05\""
+        },
+        "rollups": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1ExerciseRollup"
+          }
+        }
+      }
+    },
+    "v1ProgressionSuggestion": {
+      "type": "object",
+      "properties": {
+        "exerciseId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "exerciseName": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/v1ExerciseKind"
+        },
+        "currentGoalCount": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The current goal that should be considered for a bump."
+        },
+        "currentGoalDurationSeconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "supportingSessions": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of recent sessions that met the threshold."
+        },
+        "recommendation": {
+          "type": "string",
+          "description": "Recommendation, e.g. \"+2 reps\" or \"+5s\". Free-text for UI."
+        }
+      }
+    },
+    "v1RefreshRequest": {
+      "type": "object"
+    },
+    "v1RefreshResponse": {
+      "type": "object"
+    },
+    "v1RegisterRequest": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1RegisterResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/v1User"
+        }
+      }
+    },
+    "v1Routine": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "archivedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1RoutineItem"
+          }
+        },
+        "alternateSets": {
+          "type": "boolean",
+          "description": "When true, the runner walks one set at a time round-robin across items\n(circuit / superset style). When false, each item is fully exhausted\nbefore moving to the next."
+        }
+      }
+    },
+    "v1RoutineItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "routineId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "exerciseId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "position": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "v1RoutineRun": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "routineId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1Session": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "exerciseId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "routineRunId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/definitions/v1SessionStatus"
+        },
+        "countCompleted": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "countGoal": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "durationSeconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "difficulty": {
+          "$ref": "#/definitions/v1Difficulty"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "setIndex": {
+          "type": "integer",
+          "format": "int32",
+          "description": "1-based set index for multi-set workouts; NULL/0 for logged-only kinds."
+        },
+        "setTotal": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Planned set total at the time of logging (so reports can recover the plan)."
+        },
+        "weightLb": {
+          "type": "number",
+          "format": "double",
+          "description": "Actual weight used (pounds) for weighted sessions."
+        }
+      }
+    },
+    "v1SessionStatus": {
+      "type": "string",
+      "enum": [
+        "SESSION_STATUS_UNSPECIFIED",
+        "SESSION_STATUS_IN_PROGRESS",
+        "SESSION_STATUS_COMPLETED",
+        "SESSION_STATUS_SKIPPED",
+        "SESSION_STATUS_FAILED"
+      ],
+      "default": "SESSION_STATUS_UNSPECIFIED"
+    },
+    "v1StartRoutineResponse": {
+      "type": "object",
+      "properties": {
+        "run": {
+          "$ref": "#/definitions/v1RoutineRun"
+        }
+      }
+    },
+    "v1UpdateExerciseResponse": {
+      "type": "object",
+      "properties": {
+        "exercise": {
+          "$ref": "#/definitions/v1Exercise"
+        }
+      }
+    },
+    "v1UpdateMachineResponse": {
+      "type": "object",
+      "properties": {
+        "machine": {
+          "$ref": "#/definitions/v1Machine"
+        }
+      }
+    },
+    "v1UpdateRoutineResponse": {
+      "type": "object",
+      "properties": {
+        "routine": {
+          "$ref": "#/definitions/v1Routine"
+        }
+      }
+    },
+    "v1User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

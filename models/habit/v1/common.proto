@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package habit.v1;
+
+enum ExerciseKind {
+  EXERCISE_KIND_UNSPECIFIED = 0;
+  EXERCISE_KIND_TIMED = 1;     // planks: timer + beep + difficulty
+  EXERCISE_KIND_COUNTED = 2;   // push-ups: count up + confirm + difficulty
+  EXERCISE_KIND_LOGGED = 3;    // kata: simple done + optional note
+  EXERCISE_KIND_WEIGHTED = 4;  // gym: sets/reps/weight + difficulty
+}
+
+enum SessionStatus {
+  SESSION_STATUS_UNSPECIFIED = 0;
+  SESSION_STATUS_IN_PROGRESS = 1;
+  SESSION_STATUS_COMPLETED = 2;
+  SESSION_STATUS_SKIPPED = 3;
+  SESSION_STATUS_FAILED = 4;
+}
+
+enum Difficulty {
+  DIFFICULTY_UNSPECIFIED = 0;
+  DIFFICULTY_EASY = 1;
+  DIFFICULTY_MODERATE = 2;
+  DIFFICULTY_HARD = 3;
+  DIFFICULTY_VERY_HARD = 4;
+  DIFFICULTY_FAILED = 5;
+}

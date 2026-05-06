@@ -1,0 +1,33 @@
+# Binaries
+/bin/
+/dist/
+/server
+/seed-user
+
+# Local data
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+data/
+
+# Local config (use config.yaml.example as template)
+config.yaml
+.env
+.env.local
+
+# Frontend
+web/node_modules/
+web/.svelte-kit/
+web/build/
+web/dist/
+
+# Embedded frontend (populated by `make web`); keep dist/ + placeholder.
+webfs/dist/*
+!webfs/dist/index.html
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package habit.v1;
+
+import "google/protobuf/timestamp.proto";
+import "habit/v1/common.proto";
+
+message Exercise {
+  int64 id = 1;
+  string name = 2;
+  ExerciseKind kind = 3;
+  optional int64 machine_id = 4;
+  // For COUNTED and WEIGHTED: target reps per set.
+  optional int32 goal_count = 5;
+  // For TIMED: target seconds per set.
+  optional int32 goal_duration_seconds = 6;
+  string instructions = 7;
+  google.protobuf.Timestamp created_at = 8;
+  optional google.protobuf.Timestamp archived_at = 9;
+  // Number of sets to perform per session. NULL or 0 means "1 set".
+  optional int32 goal_sets = 10;
+  // For WEIGHTED only: target weight in pounds.
+  optional double goal_weight_lb = 11;
+}
+
+message ListExercisesRequest {
+  bool include_archived = 1;
+}
+message ListExercisesResponse {
+  repeated Exercise exercises = 1;
+}
+
+message GetExerciseRequest { int64 id = 1; }
+message GetExerciseResponse { Exercise exercise = 1; }
+
+message CreateExerciseRequest {
+  string name = 1;
+  ExerciseKind kind = 2;
+  optional int64 machine_id = 3;
+  optional int32 goal_count = 4;
+  optional int32 goal_duration_seconds = 5;
+  string instructions = 6;
+  optional int32 goal_sets = 7;
+  optional double goal_weight_lb = 8;
+}
+message CreateExerciseResponse { Exercise exercise = 1; }
+
+message UpdateExerciseRequest {
+  int64 id = 1;
+  string name = 2;
+  ExerciseKind kind = 3;
+  optional int64 machine_id = 4;
+  optional int32 goal_count = 5;
+  optional int32 goal_duration_seconds = 6;
+  string instructions = 7;
+  optional int32 goal_sets = 8;
+  optional double goal_weight_lb = 9;
+}
+message UpdateExerciseResponse { Exercise exercise = 1; }
+
+message ArchiveExerciseRequest { int64 id = 1; }
+message ArchiveExerciseResponse {}

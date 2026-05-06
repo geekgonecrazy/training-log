@@ -1,0 +1,20 @@
+server:
+  address: ":8080"
+  read_timeout: 15s
+  write_timeout: 30s
+  shutdown_timeout: 10s
+
+database:
+  path: ./data/habit.db
+
+auth:
+  jwt_secret: "${JWT_SECRET}"          # required; set in env. Fail-fast if empty in non-dev.
+  access_token_ttl: 15m
+  refresh_token_ttl: 720h               # 30 days
+  registration_open: false              # flip true once to bootstrap your account
+  cookie_domain: ""                     # leave empty to default to request host
+  cookie_secure: true                   # set false only for local http dev
+
+log:
+  level: info                           # debug | info | warn | error
+  format: text                          # text | json

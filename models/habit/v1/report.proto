@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package habit.v1;
+
+import "habit/v1/common.proto";
+
+message ExerciseRollup {
+  int64 exercise_id = 1;
+  string exercise_name = 2;
+  ExerciseKind kind = 3;
+
+  int32 sessions_total = 4;
+  int32 sessions_completed = 5;
+  int32 sessions_skipped = 6;
+  int32 sessions_failed = 7;
+
+  // Sum of count_completed across the period (counted exercises).
+  int32 total_count = 8;
+  // Sum of duration_seconds across the period (timed exercises).
+  int32 total_duration_seconds = 9;
+
+  // Mean numeric difficulty (1=Easy..5=Failed) over completed sessions.
+  // 0 if no completed sessions had a difficulty rating.
+  double avg_difficulty = 10;
+}
+
+message PeriodReport {
+  // Period identifier:
+  //  - weekly: ISO week, e.g. "2026-W18"
+  //  - monthly: "2026-05"
+  string period = 1;
+  repeated ExerciseRollup rollups = 2;
+}
+
+message GetWeeklyReportRequest {
+  // ISO week, e.g. "2026-W18". If empty, current week.
+  string week = 1;
+}
+message GetWeeklyReportResponse { PeriodReport report = 1; }
+
+message GetMonthlyReportRequest {
+  // YYYY-MM. If empty, current month.
+  string month = 1;
+}
+message GetMonthlyReportResponse { PeriodReport report = 1; }
+
+message ProgressionSuggestion {
+  int64 exercise_id = 1;
+  string exercise_name = 2;
+  ExerciseKind kind = 3;
+  // The current goal that should be considered for a bump.
+  optional int32 current_goal_count = 4;
+  optional int32 current_goal_duration_seconds = 5;
+  // The number of recent sessions that met the threshold.
+  int32 supporting_sessions = 6;
+  // Recommendation, e.g. "+2 reps" or "+5s". Free-text for UI.
+  string recommendation = 7;
+}
+
+message ListProgressionSuggestionsRequest {}
+message ListProgressionSuggestionsResponse {
+  repeated ProgressionSuggestion suggestions = 1;
+}
