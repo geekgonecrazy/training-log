@@ -6,7 +6,6 @@ package metrics
 
 import (
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
@@ -69,15 +68,6 @@ var (
 		[]string{"version", "commit"},
 	)
 )
-
-func init() {
-	// Default registry skips runtime/process collectors; register them so
-	// /metrics exposes goroutines, GC, RSS, etc.
-	prometheus.DefaultRegisterer.MustRegister(
-		collectors.NewGoCollector(),
-		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
-	)
-}
 
 // Init records build info, called once at startup.
 func Init(version, commit string) {
