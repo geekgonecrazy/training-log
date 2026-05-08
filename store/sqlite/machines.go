@@ -13,6 +13,7 @@ import (
 type machineStore struct{ db *sql.DB }
 
 func (s *machineStore) List(ctx context.Context, userID int64) ([]*store.Machine, error) {
+	defer trackDBOp("select", "machines", "List")()
 	rows, err := s.db.QueryContext(ctx, `
 		SELECT id, user_id, name, location, notes, created_at
 		FROM machines WHERE user_id = ? ORDER BY name COLLATE NOCASE ASC`, userID)
@@ -33,6 +34,7 @@ func (s *machineStore) List(ctx context.Context, userID int64) ([]*store.Machine
 }
 
 func (s *machineStore) Get(ctx context.Context, userID, id int64) (*store.Machine, error) {
+	defer trackDBOp("select", "machines", "Get")()
 	row := s.db.QueryRowContext(ctx, `
 		SELECT id, user_id, name, location, notes, created_at
 		FROM machines WHERE user_id = ? AND id = ?`, userID, id)
@@ -49,6 +51,7 @@ func (s *machineStore) Get(ctx context.Context, userID, id int64) (*store.Machin
 }
 
 func (s *machineStore) Create(ctx context.Context, m *store.Machine) (int64, error) {
+	defer trackDBOp("insert", "machines", "Create")()
 	now := time.Now().Unix()
 	res, err := s.db.ExecContext(ctx, `
 		INSERT INTO machines(user_id, name, location, notes, created_at)
@@ -67,6 +70,7 @@ func (s *machineStore) Create(ctx context.Context, m *store.Machine) (int64, err
 }
 
 func (s *machineStore) Update(ctx context.Context, m *store.Machine) error {
+	defer trackDBOp("update", "machines", "Update")()
 	res, err := s.db.ExecContext(ctx, `
 		UPDATE machines SET name = ?, location = ?, notes = ?
 		WHERE id = ? AND user_id = ?`,
@@ -85,6 +89,7 @@ func (s *machineStore) Update(ctx context.Context, m *store.Machine) error {
 }
 
 func (s *machineStore) Delete(ctx context.Context, userID, id int64) error {
+	defer trackDBOp("delete", "machines", "Delete")()
 	res, err := s.db.ExecContext(ctx,
 		`DELETE FROM machines WHERE user_id = ? AND id = ?`, userID, id)
 	if err != nil {

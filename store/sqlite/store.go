@@ -12,7 +12,9 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"time"
 
+	"github.com/geekgonecrazy/training-log/core/metrics"
 	"github.com/geekgonecrazy/training-log/store"
 
 	_ "modernc.org/sqlite"
@@ -58,6 +60,17 @@ func (s *Store) Close() error { return s.db.Close() }
 
 // Ping verifies the database is reachable. Used for readiness probes.
 func (s *Store) Ping(ctx context.Context) error { return s.db.PingContext(ctx) }
+
+// trackDBOp records the operation count + duration for a database call.
+//
+// Usage: defer trackDBOp("select", "users", "GetByID")()
+func trackDBOp(operation, table, method string) func() {
+	start := time.Now()
+	return func() {
+		metrics.DBOperationsTotal.WithLabelValues(operation, table).Inc()
+		metrics.DBOperationDuration.WithLabelValues(operation, method).Observe(time.Since(start).Seconds())
+	}
+}
 
 func (s *Store) Users() store.UserStore                 { return &userStore{db: s.db} }
 func (s *Store) RefreshTokens() store.RefreshTokenStore { return &refreshTokenStore{db: s.db} }

@@ -14,6 +14,7 @@ import (
 type userStore struct{ db *sql.DB }
 
 func (s *userStore) Create(ctx context.Context, email, passwordHash, name string) (*store.User, error) {
+	defer trackDBOp("insert", "users", "Create")()
 	now := time.Now().Unix()
 	res, err := s.db.ExecContext(ctx,
 		`INSERT INTO users(email, password_hash, name, created_at) VALUES(?, ?, ?, ?)`,
@@ -38,12 +39,14 @@ func (s *userStore) Create(ctx context.Context, email, passwordHash, name string
 }
 
 func (s *userStore) GetByID(ctx context.Context, id int64) (*store.User, error) {
+	defer trackDBOp("select", "users", "GetByID")()
 	row := s.db.QueryRowContext(ctx,
 		`SELECT id, email, password_hash, name, created_at FROM users WHERE id = ?`, id)
 	return scanUser(row)
 }
 
 func (s *userStore) GetByEmail(ctx context.Context, email string) (*store.User, error) {
+	defer trackDBOp("select", "users", "GetByEmail")()
 	row := s.db.QueryRowContext(ctx,
 		`SELECT id, email, password_hash, name, created_at FROM users WHERE email = ? COLLATE NOCASE`, email)
 	return scanUser(row)

@@ -12,6 +12,7 @@ import (
 type exerciseStore struct{ db *sql.DB }
 
 func (s *exerciseStore) List(ctx context.Context, userID int64, includeArchived bool) ([]*store.Exercise, error) {
+	defer trackDBOp("select", "exercises", "List")()
 	q := `
 		SELECT id, user_id, name, kind, machine_id, goal_count, goal_duration_seconds,
 		       instructions, created_at, archived_at, goal_sets, goal_weight_lb
@@ -38,6 +39,7 @@ func (s *exerciseStore) List(ctx context.Context, userID int64, includeArchived 
 }
 
 func (s *exerciseStore) Get(ctx context.Context, userID, id int64) (*store.Exercise, error) {
+	defer trackDBOp("select", "exercises", "Get")()
 	rows, err := s.db.QueryContext(ctx, `
 		SELECT id, user_id, name, kind, machine_id, goal_count, goal_duration_seconds,
 		       instructions, created_at, archived_at, goal_sets, goal_weight_lb
@@ -53,6 +55,7 @@ func (s *exerciseStore) Get(ctx context.Context, userID, id int64) (*store.Exerc
 }
 
 func (s *exerciseStore) Create(ctx context.Context, e *store.Exercise) (int64, error) {
+	defer trackDBOp("insert", "exercises", "Create")()
 	now := time.Now().Unix()
 	res, err := s.db.ExecContext(ctx, `
 		INSERT INTO exercises(user_id, name, kind, machine_id, goal_count, goal_duration_seconds,
@@ -74,6 +77,7 @@ func (s *exerciseStore) Create(ctx context.Context, e *store.Exercise) (int64, e
 }
 
 func (s *exerciseStore) Update(ctx context.Context, e *store.Exercise) error {
+	defer trackDBOp("update", "exercises", "Update")()
 	res, err := s.db.ExecContext(ctx, `
 		UPDATE exercises
 		SET name = ?, kind = ?, machine_id = ?, goal_count = ?, goal_duration_seconds = ?,
@@ -97,6 +101,7 @@ func (s *exerciseStore) Update(ctx context.Context, e *store.Exercise) error {
 }
 
 func (s *exerciseStore) Archive(ctx context.Context, userID, id int64, at time.Time) error {
+	defer trackDBOp("update", "exercises", "Archive")()
 	res, err := s.db.ExecContext(ctx,
 		`UPDATE exercises SET archived_at = ? WHERE user_id = ? AND id = ? AND archived_at IS NULL`,
 		at.Unix(), userID, id)

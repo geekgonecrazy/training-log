@@ -14,6 +14,7 @@ import (
 type sessionStore struct{ db *sql.DB }
 
 func (s *sessionStore) Log(ctx context.Context, sn *store.Session) (*store.Session, error) {
+	defer trackDBOp("insert", "sessions", "Log")()
 	// Idempotent on (user_id, client_id).
 	existing, err := s.getByClientID(ctx, sn.UserID, sn.ClientID)
 	if err == nil {
@@ -50,6 +51,7 @@ func (s *sessionStore) Log(ctx context.Context, sn *store.Session) (*store.Sessi
 }
 
 func (s *sessionStore) List(ctx context.Context, userID int64, f store.SessionFilter) ([]*store.Session, error) {
+	defer trackDBOp("select", "sessions", "List")()
 	var (
 		clauses []string
 		args    []any
@@ -97,6 +99,7 @@ func (s *sessionStore) List(ctx context.Context, userID int64, f store.SessionFi
 }
 
 func (s *sessionStore) RecentCompletedForExercise(ctx context.Context, userID, exerciseID int64, limit int) ([]*store.Session, error) {
+	defer trackDBOp("select", "sessions", "RecentCompletedForExercise")()
 	if limit <= 0 {
 		limit = 10
 	}
@@ -122,6 +125,7 @@ func (s *sessionStore) RecentCompletedForExercise(ctx context.Context, userID, e
 }
 
 func (s *sessionStore) getByClientID(ctx context.Context, userID int64, clientID string) (*store.Session, error) {
+	defer trackDBOp("select", "sessions", "getByClientID")()
 	rows, err := s.db.QueryContext(ctx,
 		`SELECT `+sessionCols+` FROM sessions WHERE user_id = ? AND client_id = ?`,
 		userID, clientID)

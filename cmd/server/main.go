@@ -48,15 +48,12 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 
-	mx := metrics.New()
-
 	handler, err := router.New(ctx, router.Deps{
 		Cfg:        cfg,
 		Logger:     logger,
 		Auth:       authCtrl,
 		Habit:      habitCtrl,
 		StaticRoot: webfs.FS(),
-		Metrics:    mx.Middleware,
 	})
 	if err != nil {
 		logger.Error("build router", "err", err)
@@ -87,7 +84,7 @@ func main() {
 			Addr: cfg.Server.InternalAddress,
 			Handler: router.NewInternal(router.InternalDeps{
 				DB:             st,
-				MetricsHandler: mx.Handler(),
+				MetricsHandler: metrics.Handler(),
 			}),
 			ReadTimeout:  cfg.Server.ReadTimeout,
 			WriteTimeout: cfg.Server.WriteTimeout,

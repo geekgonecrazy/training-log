@@ -13,6 +13,7 @@ import (
 
 	"github.com/geekgonecrazy/training-log/controllers"
 	"github.com/geekgonecrazy/training-log/core/auth"
+	"github.com/geekgonecrazy/training-log/core/metrics"
 )
 
 // Auth reads the access cookie, validates the JWT, and stores the user_id in
@@ -33,16 +34,24 @@ func Auth(secret []byte, publicPathPrefixes []string) func(http.Handler) http.Ha
 				}
 			}
 
-			if c, err := r.Cookie(controllers.CookieAccessToken); err == nil && c.Value != "" {
-				if claims, err := auth.ParseAccessToken(secret, c.Value, time.Now()); err == nil {
-					r = r.WithContext(auth.ContextWithUserID(r.Context(), claims.Subject))
+			c, err := r.Cookie(controllers.CookieAccessToken)
+			switch {
+			case err != nil || c.Value == "":
+				if !isPublic {
+					metrics.AuthTokenValidationsTotal.WithLabelValues("missing_token").Inc()
 				}
-				// Bad/expired access tokens silently fall through; the client
-				// will get a 401 from /v1/auth/me or any protected RPC and can
-				// then call /v1/auth/refresh.
+			default:
+				if claims, perr := auth.ParseAccessToken(secret, c.Value, time.Now()); perr == nil {
+					r = r.WithContext(auth.ContextWithUserID(r.Context(), claims.Subject))
+					metrics.AuthTokenValidationsTotal.WithLabelValues("success").Inc()
+				} else {
+					// Bad/expired access tokens silently fall through; the client
+					// will get a 401 from /v1/auth/me or any protected RPC and can
+					// then call /v1/auth/refresh.
+					metrics.AuthTokenValidationsTotal.WithLabelValues("invalid_token").Inc()
+				}
 			}
 
-			_ = isPublic // currently no different handling; reserved for future rate-limit etc.
 			next.ServeHTTP(w, r)
 		})
 	}

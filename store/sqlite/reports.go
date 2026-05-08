@@ -19,6 +19,7 @@ type reportStore struct{ db *sql.DB }
 // AvgDifficulty is computed only over rows that have a non-null difficulty AND status = COMPLETED;
 // 0 if no qualifying rows.
 func (s *reportStore) Rollup(ctx context.Context, userID int64, from, to time.Time) ([]*store.ExerciseRollup, error) {
+	defer trackDBOp("select", "sessions", "Rollup")()
 	rows, err := s.db.QueryContext(ctx, `
 		SELECT
 		  e.id,

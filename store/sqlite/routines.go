@@ -13,6 +13,7 @@ import (
 type routineStore struct{ db *sql.DB }
 
 func (s *routineStore) List(ctx context.Context, userID int64, includeArchived bool) ([]*store.Routine, error) {
+	defer trackDBOp("select", "routines", "List")()
 	q := `SELECT id, user_id, name, created_at, archived_at, alternate_sets FROM routines WHERE user_id = ?`
 	if !includeArchived {
 		q += ` AND archived_at IS NULL`
@@ -46,6 +47,7 @@ func (s *routineStore) List(ctx context.Context, userID int64, includeArchived b
 }
 
 func (s *routineStore) Get(ctx context.Context, userID, id int64) (*store.Routine, error) {
+	defer trackDBOp("select", "routines", "Get")()
 	rows, err := s.db.QueryContext(ctx,
 		`SELECT id, user_id, name, created_at, archived_at, alternate_sets FROM routines WHERE user_id = ? AND id = ?`,
 		userID, id)
@@ -69,6 +71,7 @@ func (s *routineStore) Get(ctx context.Context, userID, id int64) (*store.Routin
 }
 
 func (s *routineStore) Create(ctx context.Context, userID int64, name string, exerciseIDs []int64, alternateSets bool) (*store.Routine, error) {
+	defer trackDBOp("insert", "routines", "Create")()
 	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil {
 		return nil, err
@@ -96,6 +99,7 @@ func (s *routineStore) Create(ctx context.Context, userID int64, name string, ex
 }
 
 func (s *routineStore) Update(ctx context.Context, userID, id int64, name string, exerciseIDs []int64, alternateSets bool) (*store.Routine, error) {
+	defer trackDBOp("update", "routines", "Update")()
 	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil {
 		return nil, err
@@ -134,6 +138,7 @@ func boolToInt(b bool) int {
 }
 
 func (s *routineStore) Archive(ctx context.Context, userID, id int64, at time.Time) error {
+	defer trackDBOp("update", "routines", "Archive")()
 	res, err := s.db.ExecContext(ctx,
 		`UPDATE routines SET archived_at = ? WHERE user_id = ? AND id = ? AND archived_at IS NULL`,
 		at.Unix(), userID, id)
@@ -151,6 +156,7 @@ func (s *routineStore) Archive(ctx context.Context, userID, id int64, at time.Ti
 }
 
 func (s *routineStore) StartRun(ctx context.Context, userID, routineID int64, startedAt time.Time) (*store.RoutineRun, error) {
+	defer trackDBOp("insert", "routine_runs", "StartRun")()
 	// Verify ownership of the routine.
 	var ownedID int64
 	err := s.db.QueryRowContext(ctx,
@@ -181,6 +187,7 @@ func (s *routineStore) StartRun(ctx context.Context, userID, routineID int64, st
 }
 
 func (s *routineStore) EndRun(ctx context.Context, userID, runID int64, endedAt time.Time) (*store.RoutineRun, error) {
+	defer trackDBOp("update", "routine_runs", "EndRun")()
 	res, err := s.db.ExecContext(ctx,
 		`UPDATE routine_runs SET ended_at = ? WHERE id = ? AND user_id = ? AND ended_at IS NULL`,
 		endedAt.Unix(), runID, userID)
@@ -199,6 +206,7 @@ func (s *routineStore) EndRun(ctx context.Context, userID, runID int64, endedAt 
 }
 
 func (s *routineStore) GetRun(ctx context.Context, userID, runID int64) (*store.RoutineRun, error) {
+	defer trackDBOp("select", "routine_runs", "GetRun")()
 	row := s.db.QueryRowContext(ctx,
 		`SELECT id, user_id, routine_id, started_at, ended_at FROM routine_runs WHERE id = ? AND user_id = ?`,
 		runID, userID)
@@ -222,6 +230,7 @@ func (s *routineStore) GetRun(ctx context.Context, userID, runID int64) (*store.
 }
 
 func (s *routineStore) loadItems(ctx context.Context, routineID int64) ([]*store.RoutineItem, error) {
+	defer trackDBOp("select", "routine_items", "loadItems")()
 	rows, err := s.db.QueryContext(ctx,
 		`SELECT id, routine_id, exercise_id, position FROM routine_items WHERE routine_id = ? ORDER BY position`,
 		routineID)
