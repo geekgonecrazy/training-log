@@ -30,6 +30,15 @@
   const RANGE_DAYS: Record<RangeKey, number> = { '3m': 90, '6m': 180, '12m': 365 };
   const RANGES: RangeKey[] = ['3m', '6m', '12m'];
 
+  // Single-series isolation: clicking a legend entry shows just that one;
+  // clicking it again (or "Show all") clears.
+  let isolatedSeries: string | null = null;
+
+  function onLegendClick(e: CustomEvent<{ name: string }>) {
+    const { name } = e.detail;
+    isolatedSeries = isolatedSeries === name ? null : name;
+  }
+
   // Distinct, OLED-friendly palette. Cycles if there are more exercises than colors.
   const PALETTE = [
     '#3b82f6', // blue
@@ -254,6 +263,8 @@
         xRange={[from, now]}
         yLabel="seconds"
         yFormat={fmtSecs}
+        isolatedName={isolatedSeries}
+        on:legendClick={onLegendClick}
       />
     </div>
   {/if}

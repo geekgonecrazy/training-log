@@ -2,8 +2,12 @@
   // Multi-series SVG line chart. Each series gets its own color; lines are
   // drawn between sequential points within a series, and single-point series
   // render as a lone dot. No deps.
+  //
+  // Click a legend entry to isolate that series — only it will render and
+  // the y-axis rescales to its values. Click again (or click another) to
+  // toggle. Parents bind `isolatedName` to control this externally.
 
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount, onDestroy, createEventDispatcher } from 'svelte';
   import type { Series } from './LineChart';
 
   export let series: Series[] = [];
@@ -13,6 +17,11 @@
   // Optional explicit x-axis window — useful when the user picks a fixed
   // range (3M / 6M / 12M) so the axis stays stable as data fills in.
   export let xRange: [number, number] | null = null;
+  // When set, only the named series is plotted; all other legend items are
+  // dimmed. null = show everything.
+  export let isolatedName: string | null = null;
+
+  const dispatch = createEventDispatcher<{ legendClick: { name: string } }>();
 
   const PAD_L = 44;
   const PAD_R = 12;
@@ -37,12 +46,17 @@
   });
   onDestroy(() => ro?.disconnect());
 
-  $: allPoints = series.flatMap((s) => s.points);
-  $: xs = allPoints.map((p) => p.x);
-  $: ys = allPoints.map((p) => p.y);
+  // Visible series: when isolated, only the named one is drawn. Y-axis is
+  // computed from visible points so isolation actually zooms in.
+  $: visibleSeries = isolatedName
+    ? series.filter((s) => s.name === isolatedName)
+    : series;
+  $: visiblePoints = visibleSeries.flatMap((s) => s.points);
+  $: ys = visiblePoints.map((p) => p.y);
+  $: allXs = series.flatMap((s) => s.points).map((p) => p.x);
 
-  $: xMin = xRange ? xRange[0] : xs.length ? Math.min(...xs) : 0;
-  $: xMax = xRange ? xRange[1] : xs.length ? Math.max(...xs) : 1;
+  $: xMin = xRange ? xRange[0] : allXs.length ? Math.min(...allXs) : 0;
+  $: xMax = xRange ? xRange[1] : allXs.length ? Math.max(...allXs) : 1;
   $: yMin = ys.length ? Math.min(...ys, 0) : 0;
   $: yMaxRaw = ys.length ? Math.max(...ys) : 1;
   $: yMax = yMaxRaw === yMin ? yMin + 1 : yMaxRaw;
@@ -101,17 +115,34 @@
     return new Date(ms).toLocaleDateString([], { month: 'short', day: 'numeric' });
   }
 
-  $: hasData = allPoints.length > 0;
+  $: hasData = visiblePoints.length > 0;
+
+  function isDimmed(name: string): boolean {
+    return isolatedName !== null && isolatedName !== name;
+  }
 </script>
 
 {#if series.length > 0}
   <div class="legend">
     {#each series as s}
-      <span class="legend-item">
+      <button
+        type="button"
+        class="legend-item"
+        class:dimmed={isDimmed(s.name)}
+        on:click={() => dispatch('legendClick', { name: s.name })}
+        aria-pressed={isolatedName === s.name}
+      >
         <span class="dot" style="background: {s.color};"></span>
         {s.name}
-      </span>
+      </button>
     {/each}
+    {#if isolatedName}
+      <button
+        type="button"
+        class="legend-item show-all"
+        on:click={() => dispatch('legendClick', { name: isolatedName ?? '' })}
+      >Show all</button>
+    {/if}
   </div>
 {/if}
 
@@ -149,8 +180,8 @@
     </text>
   {/each}
 
-  <!-- one path per series -->
-  {#each series as s}
+  <!-- one path per visible series -->
+  {#each visibleSeries as s}
     {#if s.points.length > 1}
       <path
         d={pathFor(s)}
@@ -180,12 +211,42 @@
   .legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem 0.85rem;
+    gap: 0.4rem 0.6rem;
     margin: 0 0 0.5rem;
     font-size: 0.85rem;
     color: var(--text-2);
   }
-  .legend-item { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 0.2rem 0.55rem 0.2rem 0.4rem;
+    color: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    min-height: 0;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease, opacity 0.12s ease;
+  }
+  .legend-item:hover { background: var(--surface-2); }
+  .legend-item[aria-pressed='true'] {
+    background: var(--surface-2);
+    border-color: var(--hairline-strong);
+  }
+  .legend-item.dimmed { opacity: 0.35; }
+  .legend-item.dimmed:hover { opacity: 0.7; }
+
+  .legend-item.show-all {
+    color: var(--accent);
+    border-color: rgba(0, 210, 168, 0.3);
+    padding: 0.2rem 0.7rem;
+    font-weight: 600;
+  }
+  .legend-item.show-all:hover { background: rgba(0, 210, 168, 0.08); }
+
   .dot {
     display: inline-block;
     width: 10px;
