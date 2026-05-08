@@ -41,6 +41,10 @@ type Deps struct {
 	Auth       *controllers.AuthController
 	Habit      *controllers.HabitController
 	StaticRoot fs.FS // expected to point at the built SvelteKit app's root (with index.html at root)
+
+	// Metrics, when set, instruments every public request. Leave nil to
+	// disable instrumentation (e.g. in tests).
+	Metrics func(http.Handler) http.Handler
 }
 
 // New builds the http.Handler.
@@ -62,14 +66,19 @@ func New(ctx context.Context, d Deps) (http.Handler, error) {
 	root.Handle("/v1/", gwMux)
 	root.Handle("/", spaHandler(d.StaticRoot, d.Logger))
 
-	stack := chain(
+	mws := []func(http.Handler) http.Handler{
 		middleware.RequestID,
+	}
+	if d.Metrics != nil {
+		mws = append(mws, d.Metrics)
+	}
+	mws = append(mws,
 		middleware.Logging(d.Logger),
 		middleware.Recover(d.Logger),
 		middleware.Auth([]byte(d.Cfg.Auth.JWTSecret), []string{"/v1/auth/"}),
 	)
 
-	return stack(root), nil
+	return chain(mws...)(root), nil
 }
 
 func chain(mws ...func(http.Handler) http.Handler) func(http.Handler) http.Handler {

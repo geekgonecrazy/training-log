@@ -11,6 +11,7 @@ type Config struct {
 
 type ServerConfig struct {
 	Address         string        `yaml:"address"`
+	InternalAddress string        `yaml:"internal_address"`
 	ReadTimeout     time.Duration `yaml:"read_timeout"`
 	WriteTimeout    time.Duration `yaml:"write_timeout"`
 	ShutdownTimeout time.Duration `yaml:"shutdown_timeout"`
@@ -38,6 +39,7 @@ func defaults() Config {
 	return Config{
 		Server: ServerConfig{
 			Address:         ":8080",
+			InternalAddress: ":9090",
 			ReadTimeout:     15 * time.Second,
 			WriteTimeout:    30 * time.Second,
 			ShutdownTimeout: 10 * time.Second,

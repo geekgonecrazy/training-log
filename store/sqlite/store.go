@@ -56,6 +56,9 @@ func Open(path string) (*Store, error) {
 
 func (s *Store) Close() error { return s.db.Close() }
 
+// Ping verifies the database is reachable. Used for readiness probes.
+func (s *Store) Ping(ctx context.Context) error { return s.db.PingContext(ctx) }
+
 func (s *Store) Users() store.UserStore                 { return &userStore{db: s.db} }
 func (s *Store) RefreshTokens() store.RefreshTokenStore { return &refreshTokenStore{db: s.db} }
 func (s *Store) Machines() store.MachineStore           { return &machineStore{db: s.db} }

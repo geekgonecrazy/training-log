@@ -34,7 +34,7 @@ COPY --from=build /out/server ./server
 # Default config — set JWT_SECRET via env at runtime.
 COPY --from=build /go/src/github.com/geekgonecrazy/training-log/config.yaml.example ./config.yaml
 
-EXPOSE 8080
+EXPOSE 8080 9090
 
 # Mount /usr/local/training-log/data as a volume to persist the SQLite DB.
 VOLUME ["/usr/local/training-log/data"]

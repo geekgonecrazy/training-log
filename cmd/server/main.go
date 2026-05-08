@@ -13,6 +13,7 @@ import (
 
 	"github.com/geekgonecrazy/training-log/config"
 	"github.com/geekgonecrazy/training-log/controllers"
+	"github.com/geekgonecrazy/training-log/core/metrics"
 	"github.com/geekgonecrazy/training-log/router"
 	"github.com/geekgonecrazy/training-log/store/sqlite"
 	"github.com/geekgonecrazy/training-log/webfs"
@@ -47,12 +48,15 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 
+	mx := metrics.New()
+
 	handler, err := router.New(ctx, router.Deps{
 		Cfg:        cfg,
 		Logger:     logger,
 		Auth:       authCtrl,
 		Habit:      habitCtrl,
 		StaticRoot: webfs.FS(),
+		Metrics:    mx.Middleware,
 	})
 	if err != nil {
 		logger.Error("build router", "err", err)
@@ -74,11 +78,37 @@ func main() {
 		}
 	}()
 
+	// Internal listener: /health, /health/ready, /metrics. Bind to a separate
+	// address so it can be firewalled off from external traffic. An empty
+	// internal_address disables the listener entirely.
+	var internalSrv *http.Server
+	if cfg.Server.InternalAddress != "" {
+		internalSrv = &http.Server{
+			Addr: cfg.Server.InternalAddress,
+			Handler: router.NewInternal(router.InternalDeps{
+				DB:             st,
+				MetricsHandler: mx.Handler(),
+			}),
+			ReadTimeout:  cfg.Server.ReadTimeout,
+			WriteTimeout: cfg.Server.WriteTimeout,
+		}
+		logger.Info("internal listening", "address", cfg.Server.InternalAddress)
+		go func() {
+			if err := internalSrv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+				logger.Error("internal server error", "err", err)
+				cancel()
+			}
+		}()
+	}
+
 	<-ctx.Done()
 	logger.Info("shutting down")
 	shutdownCtx, shutdownCancel := context.WithTimeout(context.Background(), cfg.Server.ShutdownTimeout)
 	defer shutdownCancel()
 	_ = srv.Shutdown(shutdownCtx)
+	if internalSrv != nil {
+		_ = internalSrv.Shutdown(shutdownCtx)
+	}
 }
 
 func newLogger(c config.LogConfig) *slog.Logger {
