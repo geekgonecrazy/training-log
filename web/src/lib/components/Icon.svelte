@@ -22,7 +22,9 @@
     | 'cloud-off'
     | 'logout'
     | 'flame'
-    | 'timer';
+    | 'timer'
+    | 'pencil'
+    | 'trash';
   export let size: number = 24;
 </script>
 
@@ -135,5 +137,15 @@
 {:else if name === 'timer'}
   <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     <circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2"/><path d="M9 2h6M12 5v3"/>
+  </svg>
+
+{:else if name === 'pencil'}
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 20h4l10-10-4-4L4 16v4z"/><path d="M14 6l4 4"/>
+  </svg>
+
+{:else if name === 'trash'}
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 7h16M9 7V4h6v3M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13M10 11v7M14 11v7"/>
   </svg>
 {/if}

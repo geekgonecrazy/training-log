@@ -55,3 +55,20 @@ message ListSessionsRequest {
 message ListSessionsResponse {
   repeated Session sessions = 1;
 }
+
+// UpdateSessionRequest patches an already-logged session. All fields except
+// `id` are optional; only fields explicitly set in the request are written.
+// The exercise_id, routine_run_id and client_id of the row never change.
+message UpdateSessionRequest {
+  int64 id = 1;
+  optional SessionStatus status = 2;
+  optional int32 count_completed = 3;
+  optional int32 duration_seconds = 4;
+  optional Difficulty difficulty = 5;
+  optional string notes = 6;
+  optional double weight_lb = 7;
+}
+message UpdateSessionResponse { Session session = 1; }
+
+message DeleteSessionRequest { int64 id = 1; }
+message DeleteSessionResponse {}

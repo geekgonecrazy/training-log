@@ -409,6 +409,60 @@ func (c *HabitController) LogSession(ctx context.Context, req *habitv1.LogSessio
 	return &habitv1.LogSessionResponse{Session: sessionToProto(logged)}, nil
 }
 
+func (c *HabitController) UpdateSession(ctx context.Context, req *habitv1.UpdateSessionRequest) (*habitv1.UpdateSessionResponse, error) {
+	uid, err := userID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if req.GetId() == 0 {
+		return nil, status.Error(codes.InvalidArgument, "id is required")
+	}
+	var p store.SessionPatch
+	if req.Status != nil {
+		v := int32(*req.Status)
+		p.Status = &v
+	}
+	if req.CountCompleted != nil {
+		v := *req.CountCompleted
+		p.CountCompleted = &v
+	}
+	if req.DurationSeconds != nil {
+		v := *req.DurationSeconds
+		p.DurationSeconds = &v
+	}
+	if req.Difficulty != nil {
+		v := int32(*req.Difficulty)
+		p.Difficulty = &v
+	}
+	if req.Notes != nil {
+		v := *req.Notes
+		p.Notes = &v
+	}
+	if req.WeightLb != nil {
+		v := *req.WeightLb
+		p.WeightLb = &v
+	}
+	updated, err := c.Store.Sessions().Update(ctx, uid, req.GetId(), p)
+	if err != nil {
+		return nil, mapStoreErr(err, "session")
+	}
+	return &habitv1.UpdateSessionResponse{Session: sessionToProto(updated)}, nil
+}
+
+func (c *HabitController) DeleteSession(ctx context.Context, req *habitv1.DeleteSessionRequest) (*habitv1.DeleteSessionResponse, error) {
+	uid, err := userID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if req.GetId() == 0 {
+		return nil, status.Error(codes.InvalidArgument, "id is required")
+	}
+	if err := c.Store.Sessions().Delete(ctx, uid, req.GetId()); err != nil {
+		return nil, mapStoreErr(err, "session")
+	}
+	return &habitv1.DeleteSessionResponse{}, nil
+}
+
 func (c *HabitController) ListSessions(ctx context.Context, req *habitv1.ListSessionsRequest) (*habitv1.ListSessionsResponse, error) {
 	uid, err := userID(ctx)
 	if err != nil {

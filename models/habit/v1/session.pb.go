@@ -494,6 +494,225 @@ func (x *ListSessionsResponse) GetSessions() []*Session {
 	return nil
 }
 
+// UpdateSessionRequest patches an already-logged session. All fields except
+// `id` are optional; only fields explicitly set in the request are written.
+// The exercise_id, routine_run_id and client_id of the row never change.
+type UpdateSessionRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Status          *SessionStatus         `protobuf:"varint,2,opt,name=status,proto3,enum=habit.v1.SessionStatus,oneof" json:"status,omitempty"`
+	CountCompleted  *int32                 `protobuf:"varint,3,opt,name=count_completed,json=countCompleted,proto3,oneof" json:"count_completed,omitempty"`
+	DurationSeconds *int32                 `protobuf:"varint,4,opt,name=duration_seconds,json=durationSeconds,proto3,oneof" json:"duration_seconds,omitempty"`
+	Difficulty      *Difficulty            `protobuf:"varint,5,opt,name=difficulty,proto3,enum=habit.v1.Difficulty,oneof" json:"difficulty,omitempty"`
+	Notes           *string                `protobuf:"bytes,6,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	WeightLb        *float64               `protobuf:"fixed64,7,opt,name=weight_lb,json=weightLb,proto3,oneof" json:"weight_lb,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *UpdateSessionRequest) Reset() {
+	*x = UpdateSessionRequest{}
+	mi := &file_habit_v1_session_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateSessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateSessionRequest) ProtoMessage() {}
+
+func (x *UpdateSessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_habit_v1_session_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateSessionRequest.ProtoReflect.Descriptor instead.
+func (*UpdateSessionRequest) Descriptor() ([]byte, []int) {
+	return file_habit_v1_session_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *UpdateSessionRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateSessionRequest) GetStatus() SessionStatus {
+	if x != nil && x.Status != nil {
+		return *x.Status
+	}
+	return SessionStatus_SESSION_STATUS_UNSPECIFIED
+}
+
+func (x *UpdateSessionRequest) GetCountCompleted() int32 {
+	if x != nil && x.CountCompleted != nil {
+		return *x.CountCompleted
+	}
+	return 0
+}
+
+func (x *UpdateSessionRequest) GetDurationSeconds() int32 {
+	if x != nil && x.DurationSeconds != nil {
+		return *x.DurationSeconds
+	}
+	return 0
+}
+
+func (x *UpdateSessionRequest) GetDifficulty() Difficulty {
+	if x != nil && x.Difficulty != nil {
+		return *x.Difficulty
+	}
+	return Difficulty_DIFFICULTY_UNSPECIFIED
+}
+
+func (x *UpdateSessionRequest) GetNotes() string {
+	if x != nil && x.Notes != nil {
+		return *x.Notes
+	}
+	return ""
+}
+
+func (x *UpdateSessionRequest) GetWeightLb() float64 {
+	if x != nil && x.WeightLb != nil {
+		return *x.WeightLb
+	}
+	return 0
+}
+
+type UpdateSessionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Session       *Session               `protobuf:"bytes,1,opt,name=session,proto3" json:"session,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateSessionResponse) Reset() {
+	*x = UpdateSessionResponse{}
+	mi := &file_habit_v1_session_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateSessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateSessionResponse) ProtoMessage() {}
+
+func (x *UpdateSessionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_habit_v1_session_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateSessionResponse.ProtoReflect.Descriptor instead.
+func (*UpdateSessionResponse) Descriptor() ([]byte, []int) {
+	return file_habit_v1_session_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UpdateSessionResponse) GetSession() *Session {
+	if x != nil {
+		return x.Session
+	}
+	return nil
+}
+
+type DeleteSessionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSessionRequest) Reset() {
+	*x = DeleteSessionRequest{}
+	mi := &file_habit_v1_session_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSessionRequest) ProtoMessage() {}
+
+func (x *DeleteSessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_habit_v1_session_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSessionRequest.ProtoReflect.Descriptor instead.
+func (*DeleteSessionRequest) Descriptor() ([]byte, []int) {
+	return file_habit_v1_session_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *DeleteSessionRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type DeleteSessionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSessionResponse) Reset() {
+	*x = DeleteSessionResponse{}
+	mi := &file_habit_v1_session_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSessionResponse) ProtoMessage() {}
+
+func (x *DeleteSessionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_habit_v1_session_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSessionResponse.ProtoReflect.Descriptor instead.
+func (*DeleteSessionResponse) Descriptor() ([]byte, []int) {
+	return file_habit_v1_session_proto_rawDescGZIP(), []int{8}
+}
+
 var File_habit_v1_session_proto protoreflect.FileDescriptor
 
 const file_habit_v1_session_proto_rawDesc = "" +
@@ -579,7 +798,29 @@ const file_habit_v1_session_proto_rawDesc = "" +
 	"\f_exercise_idB\x11\n" +
 	"\x0f_routine_run_id\"E\n" +
 	"\x14ListSessionsResponse\x12-\n" +
-	"\bsessions\x18\x01 \x03(\v2\x11.habit.v1.SessionR\bsessionsB\x9c\x01\n" +
+	"\bsessions\x18\x01 \x03(\v2\x11.habit.v1.SessionR\bsessions\"\x8d\x03\n" +
+	"\x14UpdateSessionRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x124\n" +
+	"\x06status\x18\x02 \x01(\x0e2\x17.habit.v1.SessionStatusH\x00R\x06status\x88\x01\x01\x12,\n" +
+	"\x0fcount_completed\x18\x03 \x01(\x05H\x01R\x0ecountCompleted\x88\x01\x01\x12.\n" +
+	"\x10duration_seconds\x18\x04 \x01(\x05H\x02R\x0fdurationSeconds\x88\x01\x01\x129\n" +
+	"\n" +
+	"difficulty\x18\x05 \x01(\x0e2\x14.habit.v1.DifficultyH\x03R\n" +
+	"difficulty\x88\x01\x01\x12\x19\n" +
+	"\x05notes\x18\x06 \x01(\tH\x04R\x05notes\x88\x01\x01\x12 \n" +
+	"\tweight_lb\x18\a \x01(\x01H\x05R\bweightLb\x88\x01\x01B\t\n" +
+	"\a_statusB\x12\n" +
+	"\x10_count_completedB\x13\n" +
+	"\x11_duration_secondsB\r\n" +
+	"\v_difficultyB\b\n" +
+	"\x06_notesB\f\n" +
+	"\n" +
+	"_weight_lb\"D\n" +
+	"\x15UpdateSessionResponse\x12+\n" +
+	"\asession\x18\x01 \x01(\v2\x11.habit.v1.SessionR\asession\"&\n" +
+	"\x14DeleteSessionRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"\x17\n" +
+	"\x15DeleteSessionResponseB\x9c\x01\n" +
 	"\fcom.habit.v1B\fSessionProtoP\x01Z=github.com/geekgonecrazy/training-log/models/habit/v1;habitv1\xa2\x02\x03HXX\xaa\x02\bHabit.V1\xca\x02\bHabit\\V1\xe2\x02\x14Habit\\V1\\GPBMetadata\xea\x02\tHabit::V1b\x06proto3"
 
 var (
@@ -594,35 +835,42 @@ func file_habit_v1_session_proto_rawDescGZIP() []byte {
 	return file_habit_v1_session_proto_rawDescData
 }
 
-var file_habit_v1_session_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_habit_v1_session_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_habit_v1_session_proto_goTypes = []any{
 	(*Session)(nil),               // 0: habit.v1.Session
 	(*LogSessionRequest)(nil),     // 1: habit.v1.LogSessionRequest
 	(*LogSessionResponse)(nil),    // 2: habit.v1.LogSessionResponse
 	(*ListSessionsRequest)(nil),   // 3: habit.v1.ListSessionsRequest
 	(*ListSessionsResponse)(nil),  // 4: habit.v1.ListSessionsResponse
-	(*timestamppb.Timestamp)(nil), // 5: google.protobuf.Timestamp
-	(SessionStatus)(0),            // 6: habit.v1.SessionStatus
-	(Difficulty)(0),               // 7: habit.v1.Difficulty
+	(*UpdateSessionRequest)(nil),  // 5: habit.v1.UpdateSessionRequest
+	(*UpdateSessionResponse)(nil), // 6: habit.v1.UpdateSessionResponse
+	(*DeleteSessionRequest)(nil),  // 7: habit.v1.DeleteSessionRequest
+	(*DeleteSessionResponse)(nil), // 8: habit.v1.DeleteSessionResponse
+	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
+	(SessionStatus)(0),            // 10: habit.v1.SessionStatus
+	(Difficulty)(0),               // 11: habit.v1.Difficulty
 }
 var file_habit_v1_session_proto_depIdxs = []int32{
-	5,  // 0: habit.v1.Session.started_at:type_name -> google.protobuf.Timestamp
-	5,  // 1: habit.v1.Session.ended_at:type_name -> google.protobuf.Timestamp
-	6,  // 2: habit.v1.Session.status:type_name -> habit.v1.SessionStatus
-	7,  // 3: habit.v1.Session.difficulty:type_name -> habit.v1.Difficulty
-	5,  // 4: habit.v1.LogSessionRequest.started_at:type_name -> google.protobuf.Timestamp
-	5,  // 5: habit.v1.LogSessionRequest.ended_at:type_name -> google.protobuf.Timestamp
-	6,  // 6: habit.v1.LogSessionRequest.status:type_name -> habit.v1.SessionStatus
-	7,  // 7: habit.v1.LogSessionRequest.difficulty:type_name -> habit.v1.Difficulty
+	9,  // 0: habit.v1.Session.started_at:type_name -> google.protobuf.Timestamp
+	9,  // 1: habit.v1.Session.ended_at:type_name -> google.protobuf.Timestamp
+	10, // 2: habit.v1.Session.status:type_name -> habit.v1.SessionStatus
+	11, // 3: habit.v1.Session.difficulty:type_name -> habit.v1.Difficulty
+	9,  // 4: habit.v1.LogSessionRequest.started_at:type_name -> google.protobuf.Timestamp
+	9,  // 5: habit.v1.LogSessionRequest.ended_at:type_name -> google.protobuf.Timestamp
+	10, // 6: habit.v1.LogSessionRequest.status:type_name -> habit.v1.SessionStatus
+	11, // 7: habit.v1.LogSessionRequest.difficulty:type_name -> habit.v1.Difficulty
 	0,  // 8: habit.v1.LogSessionResponse.session:type_name -> habit.v1.Session
-	5,  // 9: habit.v1.ListSessionsRequest.from:type_name -> google.protobuf.Timestamp
-	5,  // 10: habit.v1.ListSessionsRequest.to:type_name -> google.protobuf.Timestamp
+	9,  // 9: habit.v1.ListSessionsRequest.from:type_name -> google.protobuf.Timestamp
+	9,  // 10: habit.v1.ListSessionsRequest.to:type_name -> google.protobuf.Timestamp
 	0,  // 11: habit.v1.ListSessionsResponse.sessions:type_name -> habit.v1.Session
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	10, // 12: habit.v1.UpdateSessionRequest.status:type_name -> habit.v1.SessionStatus
+	11, // 13: habit.v1.UpdateSessionRequest.difficulty:type_name -> habit.v1.Difficulty
+	0,  // 14: habit.v1.UpdateSessionResponse.session:type_name -> habit.v1.Session
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_habit_v1_session_proto_init() }
@@ -634,13 +882,14 @@ func file_habit_v1_session_proto_init() {
 	file_habit_v1_session_proto_msgTypes[0].OneofWrappers = []any{}
 	file_habit_v1_session_proto_msgTypes[1].OneofWrappers = []any{}
 	file_habit_v1_session_proto_msgTypes[3].OneofWrappers = []any{}
+	file_habit_v1_session_proto_msgTypes[5].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_habit_v1_session_proto_rawDesc), len(file_habit_v1_session_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

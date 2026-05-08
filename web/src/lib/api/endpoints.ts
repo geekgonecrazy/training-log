@@ -112,6 +112,15 @@ export interface SessionInput {
   weightLb?: number;
 }
 
+export interface SessionPatch {
+  status?: SessionStatus;
+  countCompleted?: number;
+  durationSeconds?: number;
+  difficulty?: Difficulty;
+  notes?: string;
+  weightLb?: number;
+}
+
 export const sessions = {
   log: (s: SessionInput) =>
     api<{ session: Session }>('/v1/sessions', {
@@ -127,7 +136,13 @@ export const sessions = {
     if (params.limit !== undefined) q.set('limit', String(params.limit));
     const qs = q.toString();
     return api<{ sessions?: Session[] }>(`/v1/sessions${qs ? `?${qs}` : ''}`);
-  }
+  },
+  update: (id: string, patch: SessionPatch) =>
+    api<{ session: Session }>(`/v1/sessions/${id}`, {
+      method: 'PUT',
+      body: { id, ...patch }
+    }),
+  remove: (id: string) => api<{}>(`/v1/sessions/${id}`, { method: 'DELETE' })
 };
 
 // --- Reports + progression ---

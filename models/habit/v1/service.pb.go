@@ -31,7 +31,7 @@ const file_habit_v1_service_proto_rawDesc = "" +
 	"\x05Login\x12\x16.habit.v1.LoginRequest\x1a\x17.habit.v1.LoginResponse\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/v1/auth/login\x12[\n" +
 	"\aRefresh\x12\x18.habit.v1.RefreshRequest\x1a\x19.habit.v1.RefreshResponse\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/v1/auth/refresh\x12W\n" +
 	"\x06Logout\x12\x17.habit.v1.LogoutRequest\x1a\x18.habit.v1.LogoutResponse\"\x1a\x82\xd3\xe4\x93\x02\x14:\x01*\"\x0f/v1/auth/logout\x12D\n" +
-	"\x02Me\x12\x13.habit.v1.MeRequest\x1a\x14.habit.v1.MeResponse\"\x13\x82\xd3\xe4\x93\x02\r\x12\v/v1/auth/me2\xa4\x13\n" +
+	"\x02Me\x12\x13.habit.v1.MeRequest\x1a\x14.habit.v1.MeResponse\"\x13\x82\xd3\xe4\x93\x02\r\x12\v/v1/auth/me2\x81\x15\n" +
 	"\fHabitService\x12c\n" +
 	"\fListMachines\x12\x1d.habit.v1.ListMachinesRequest\x1a\x1e.habit.v1.ListMachinesResponse\"\x14\x82\xd3\xe4\x93\x02\x0e\x12\f/v1/machines\x12b\n" +
 	"\n" +
@@ -54,7 +54,9 @@ const file_habit_v1_service_proto_rawDesc = "" +
 	"\rEndRoutineRun\x12\x1e.habit.v1.EndRoutineRunRequest\x1a\x1f.habit.v1.EndRoutineRunResponse\"(\x82\xd3\xe4\x93\x02\":\x01*\"\x1d/v1/routine-runs/{run_id}:end\x12`\n" +
 	"\n" +
 	"LogSession\x12\x1b.habit.v1.LogSessionRequest\x1a\x1c.habit.v1.LogSessionResponse\"\x17\x82\xd3\xe4\x93\x02\x11:\x01*\"\f/v1/sessions\x12c\n" +
-	"\fListSessions\x12\x1d.habit.v1.ListSessionsRequest\x1a\x1e.habit.v1.ListSessionsResponse\"\x14\x82\xd3\xe4\x93\x02\x0e\x12\f/v1/sessions\x12r\n" +
+	"\fListSessions\x12\x1d.habit.v1.ListSessionsRequest\x1a\x1e.habit.v1.ListSessionsResponse\"\x14\x82\xd3\xe4\x93\x02\x0e\x12\f/v1/sessions\x12n\n" +
+	"\rUpdateSession\x12\x1e.habit.v1.UpdateSessionRequest\x1a\x1f.habit.v1.UpdateSessionResponse\"\x1c\x82\xd3\xe4\x93\x02\x16:\x01*\x1a\x11/v1/sessions/{id}\x12k\n" +
+	"\rDeleteSession\x12\x1e.habit.v1.DeleteSessionRequest\x1a\x1f.habit.v1.DeleteSessionResponse\"\x19\x82\xd3\xe4\x93\x02\x13*\x11/v1/sessions/{id}\x12r\n" +
 	"\x0fGetWeeklyReport\x12 .habit.v1.GetWeeklyReportRequest\x1a!.habit.v1.GetWeeklyReportResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\x12\x12/v1/reports/weekly\x12v\n" +
 	"\x10GetMonthlyReport\x12!.habit.v1.GetMonthlyReportRequest\x1a\".habit.v1.GetMonthlyReportResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/v1/reports/monthly\x12\x9c\x01\n" +
 	"\x1aListProgressionSuggestions\x12+.habit.v1.ListProgressionSuggestionsRequest\x1a,.habit.v1.ListProgressionSuggestionsResponse\"#\x82\xd3\xe4\x93\x02\x1d\x12\x1b/v1/progression-suggestionsB\x9c\x01\n" +
@@ -85,36 +87,40 @@ var file_habit_v1_service_proto_goTypes = []any{
 	(*EndRoutineRunRequest)(nil),               // 21: habit.v1.EndRoutineRunRequest
 	(*LogSessionRequest)(nil),                  // 22: habit.v1.LogSessionRequest
 	(*ListSessionsRequest)(nil),                // 23: habit.v1.ListSessionsRequest
-	(*GetWeeklyReportRequest)(nil),             // 24: habit.v1.GetWeeklyReportRequest
-	(*GetMonthlyReportRequest)(nil),            // 25: habit.v1.GetMonthlyReportRequest
-	(*ListProgressionSuggestionsRequest)(nil),  // 26: habit.v1.ListProgressionSuggestionsRequest
-	(*RegisterResponse)(nil),                   // 27: habit.v1.RegisterResponse
-	(*LoginResponse)(nil),                      // 28: habit.v1.LoginResponse
-	(*RefreshResponse)(nil),                    // 29: habit.v1.RefreshResponse
-	(*LogoutResponse)(nil),                     // 30: habit.v1.LogoutResponse
-	(*MeResponse)(nil),                         // 31: habit.v1.MeResponse
-	(*ListMachinesResponse)(nil),               // 32: habit.v1.ListMachinesResponse
-	(*GetMachineResponse)(nil),                 // 33: habit.v1.GetMachineResponse
-	(*CreateMachineResponse)(nil),              // 34: habit.v1.CreateMachineResponse
-	(*UpdateMachineResponse)(nil),              // 35: habit.v1.UpdateMachineResponse
-	(*DeleteMachineResponse)(nil),              // 36: habit.v1.DeleteMachineResponse
-	(*ListExercisesResponse)(nil),              // 37: habit.v1.ListExercisesResponse
-	(*GetExerciseResponse)(nil),                // 38: habit.v1.GetExerciseResponse
-	(*CreateExerciseResponse)(nil),             // 39: habit.v1.CreateExerciseResponse
-	(*UpdateExerciseResponse)(nil),             // 40: habit.v1.UpdateExerciseResponse
-	(*ArchiveExerciseResponse)(nil),            // 41: habit.v1.ArchiveExerciseResponse
-	(*ListRoutinesResponse)(nil),               // 42: habit.v1.ListRoutinesResponse
-	(*GetRoutineResponse)(nil),                 // 43: habit.v1.GetRoutineResponse
-	(*CreateRoutineResponse)(nil),              // 44: habit.v1.CreateRoutineResponse
-	(*UpdateRoutineResponse)(nil),              // 45: habit.v1.UpdateRoutineResponse
-	(*ArchiveRoutineResponse)(nil),             // 46: habit.v1.ArchiveRoutineResponse
-	(*StartRoutineResponse)(nil),               // 47: habit.v1.StartRoutineResponse
-	(*EndRoutineRunResponse)(nil),              // 48: habit.v1.EndRoutineRunResponse
-	(*LogSessionResponse)(nil),                 // 49: habit.v1.LogSessionResponse
-	(*ListSessionsResponse)(nil),               // 50: habit.v1.ListSessionsResponse
-	(*GetWeeklyReportResponse)(nil),            // 51: habit.v1.GetWeeklyReportResponse
-	(*GetMonthlyReportResponse)(nil),           // 52: habit.v1.GetMonthlyReportResponse
-	(*ListProgressionSuggestionsResponse)(nil), // 53: habit.v1.ListProgressionSuggestionsResponse
+	(*UpdateSessionRequest)(nil),               // 24: habit.v1.UpdateSessionRequest
+	(*DeleteSessionRequest)(nil),               // 25: habit.v1.DeleteSessionRequest
+	(*GetWeeklyReportRequest)(nil),             // 26: habit.v1.GetWeeklyReportRequest
+	(*GetMonthlyReportRequest)(nil),            // 27: habit.v1.GetMonthlyReportRequest
+	(*ListProgressionSuggestionsRequest)(nil),  // 28: habit.v1.ListProgressionSuggestionsRequest
+	(*RegisterResponse)(nil),                   // 29: habit.v1.RegisterResponse
+	(*LoginResponse)(nil),                      // 30: habit.v1.LoginResponse
+	(*RefreshResponse)(nil),                    // 31: habit.v1.RefreshResponse
+	(*LogoutResponse)(nil),                     // 32: habit.v1.LogoutResponse
+	(*MeResponse)(nil),                         // 33: habit.v1.MeResponse
+	(*ListMachinesResponse)(nil),               // 34: habit.v1.ListMachinesResponse
+	(*GetMachineResponse)(nil),                 // 35: habit.v1.GetMachineResponse
+	(*CreateMachineResponse)(nil),              // 36: habit.v1.CreateMachineResponse
+	(*UpdateMachineResponse)(nil),              // 37: habit.v1.UpdateMachineResponse
+	(*DeleteMachineResponse)(nil),              // 38: habit.v1.DeleteMachineResponse
+	(*ListExercisesResponse)(nil),              // 39: habit.v1.ListExercisesResponse
+	(*GetExerciseResponse)(nil),                // 40: habit.v1.GetExerciseResponse
+	(*CreateExerciseResponse)(nil),             // 41: habit.v1.CreateExerciseResponse
+	(*UpdateExerciseResponse)(nil),             // 42: habit.v1.UpdateExerciseResponse
+	(*ArchiveExerciseResponse)(nil),            // 43: habit.v1.ArchiveExerciseResponse
+	(*ListRoutinesResponse)(nil),               // 44: habit.v1.ListRoutinesResponse
+	(*GetRoutineResponse)(nil),                 // 45: habit.v1.GetRoutineResponse
+	(*CreateRoutineResponse)(nil),              // 46: habit.v1.CreateRoutineResponse
+	(*UpdateRoutineResponse)(nil),              // 47: habit.v1.UpdateRoutineResponse
+	(*ArchiveRoutineResponse)(nil),             // 48: habit.v1.ArchiveRoutineResponse
+	(*StartRoutineResponse)(nil),               // 49: habit.v1.StartRoutineResponse
+	(*EndRoutineRunResponse)(nil),              // 50: habit.v1.EndRoutineRunResponse
+	(*LogSessionResponse)(nil),                 // 51: habit.v1.LogSessionResponse
+	(*ListSessionsResponse)(nil),               // 52: habit.v1.ListSessionsResponse
+	(*UpdateSessionResponse)(nil),              // 53: habit.v1.UpdateSessionResponse
+	(*DeleteSessionResponse)(nil),              // 54: habit.v1.DeleteSessionResponse
+	(*GetWeeklyReportResponse)(nil),            // 55: habit.v1.GetWeeklyReportResponse
+	(*GetMonthlyReportResponse)(nil),           // 56: habit.v1.GetMonthlyReportResponse
+	(*ListProgressionSuggestionsResponse)(nil), // 57: habit.v1.ListProgressionSuggestionsResponse
 }
 var file_habit_v1_service_proto_depIdxs = []int32{
 	0,  // 0: habit.v1.AuthService.Register:input_type -> habit.v1.RegisterRequest
@@ -141,38 +147,42 @@ var file_habit_v1_service_proto_depIdxs = []int32{
 	21, // 21: habit.v1.HabitService.EndRoutineRun:input_type -> habit.v1.EndRoutineRunRequest
 	22, // 22: habit.v1.HabitService.LogSession:input_type -> habit.v1.LogSessionRequest
 	23, // 23: habit.v1.HabitService.ListSessions:input_type -> habit.v1.ListSessionsRequest
-	24, // 24: habit.v1.HabitService.GetWeeklyReport:input_type -> habit.v1.GetWeeklyReportRequest
-	25, // 25: habit.v1.HabitService.GetMonthlyReport:input_type -> habit.v1.GetMonthlyReportRequest
-	26, // 26: habit.v1.HabitService.ListProgressionSuggestions:input_type -> habit.v1.ListProgressionSuggestionsRequest
-	27, // 27: habit.v1.AuthService.Register:output_type -> habit.v1.RegisterResponse
-	28, // 28: habit.v1.AuthService.Login:output_type -> habit.v1.LoginResponse
-	29, // 29: habit.v1.AuthService.Refresh:output_type -> habit.v1.RefreshResponse
-	30, // 30: habit.v1.AuthService.Logout:output_type -> habit.v1.LogoutResponse
-	31, // 31: habit.v1.AuthService.Me:output_type -> habit.v1.MeResponse
-	32, // 32: habit.v1.HabitService.ListMachines:output_type -> habit.v1.ListMachinesResponse
-	33, // 33: habit.v1.HabitService.GetMachine:output_type -> habit.v1.GetMachineResponse
-	34, // 34: habit.v1.HabitService.CreateMachine:output_type -> habit.v1.CreateMachineResponse
-	35, // 35: habit.v1.HabitService.UpdateMachine:output_type -> habit.v1.UpdateMachineResponse
-	36, // 36: habit.v1.HabitService.DeleteMachine:output_type -> habit.v1.DeleteMachineResponse
-	37, // 37: habit.v1.HabitService.ListExercises:output_type -> habit.v1.ListExercisesResponse
-	38, // 38: habit.v1.HabitService.GetExercise:output_type -> habit.v1.GetExerciseResponse
-	39, // 39: habit.v1.HabitService.CreateExercise:output_type -> habit.v1.CreateExerciseResponse
-	40, // 40: habit.v1.HabitService.UpdateExercise:output_type -> habit.v1.UpdateExerciseResponse
-	41, // 41: habit.v1.HabitService.ArchiveExercise:output_type -> habit.v1.ArchiveExerciseResponse
-	42, // 42: habit.v1.HabitService.ListRoutines:output_type -> habit.v1.ListRoutinesResponse
-	43, // 43: habit.v1.HabitService.GetRoutine:output_type -> habit.v1.GetRoutineResponse
-	44, // 44: habit.v1.HabitService.CreateRoutine:output_type -> habit.v1.CreateRoutineResponse
-	45, // 45: habit.v1.HabitService.UpdateRoutine:output_type -> habit.v1.UpdateRoutineResponse
-	46, // 46: habit.v1.HabitService.ArchiveRoutine:output_type -> habit.v1.ArchiveRoutineResponse
-	47, // 47: habit.v1.HabitService.StartRoutine:output_type -> habit.v1.StartRoutineResponse
-	48, // 48: habit.v1.HabitService.EndRoutineRun:output_type -> habit.v1.EndRoutineRunResponse
-	49, // 49: habit.v1.HabitService.LogSession:output_type -> habit.v1.LogSessionResponse
-	50, // 50: habit.v1.HabitService.ListSessions:output_type -> habit.v1.ListSessionsResponse
-	51, // 51: habit.v1.HabitService.GetWeeklyReport:output_type -> habit.v1.GetWeeklyReportResponse
-	52, // 52: habit.v1.HabitService.GetMonthlyReport:output_type -> habit.v1.GetMonthlyReportResponse
-	53, // 53: habit.v1.HabitService.ListProgressionSuggestions:output_type -> habit.v1.ListProgressionSuggestionsResponse
-	27, // [27:54] is the sub-list for method output_type
-	0,  // [0:27] is the sub-list for method input_type
+	24, // 24: habit.v1.HabitService.UpdateSession:input_type -> habit.v1.UpdateSessionRequest
+	25, // 25: habit.v1.HabitService.DeleteSession:input_type -> habit.v1.DeleteSessionRequest
+	26, // 26: habit.v1.HabitService.GetWeeklyReport:input_type -> habit.v1.GetWeeklyReportRequest
+	27, // 27: habit.v1.HabitService.GetMonthlyReport:input_type -> habit.v1.GetMonthlyReportRequest
+	28, // 28: habit.v1.HabitService.ListProgressionSuggestions:input_type -> habit.v1.ListProgressionSuggestionsRequest
+	29, // 29: habit.v1.AuthService.Register:output_type -> habit.v1.RegisterResponse
+	30, // 30: habit.v1.AuthService.Login:output_type -> habit.v1.LoginResponse
+	31, // 31: habit.v1.AuthService.Refresh:output_type -> habit.v1.RefreshResponse
+	32, // 32: habit.v1.AuthService.Logout:output_type -> habit.v1.LogoutResponse
+	33, // 33: habit.v1.AuthService.Me:output_type -> habit.v1.MeResponse
+	34, // 34: habit.v1.HabitService.ListMachines:output_type -> habit.v1.ListMachinesResponse
+	35, // 35: habit.v1.HabitService.GetMachine:output_type -> habit.v1.GetMachineResponse
+	36, // 36: habit.v1.HabitService.CreateMachine:output_type -> habit.v1.CreateMachineResponse
+	37, // 37: habit.v1.HabitService.UpdateMachine:output_type -> habit.v1.UpdateMachineResponse
+	38, // 38: habit.v1.HabitService.DeleteMachine:output_type -> habit.v1.DeleteMachineResponse
+	39, // 39: habit.v1.HabitService.ListExercises:output_type -> habit.v1.ListExercisesResponse
+	40, // 40: habit.v1.HabitService.GetExercise:output_type -> habit.v1.GetExerciseResponse
+	41, // 41: habit.v1.HabitService.CreateExercise:output_type -> habit.v1.CreateExerciseResponse
+	42, // 42: habit.v1.HabitService.UpdateExercise:output_type -> habit.v1.UpdateExerciseResponse
+	43, // 43: habit.v1.HabitService.ArchiveExercise:output_type -> habit.v1.ArchiveExerciseResponse
+	44, // 44: habit.v1.HabitService.ListRoutines:output_type -> habit.v1.ListRoutinesResponse
+	45, // 45: habit.v1.HabitService.GetRoutine:output_type -> habit.v1.GetRoutineResponse
+	46, // 46: habit.v1.HabitService.CreateRoutine:output_type -> habit.v1.CreateRoutineResponse
+	47, // 47: habit.v1.HabitService.UpdateRoutine:output_type -> habit.v1.UpdateRoutineResponse
+	48, // 48: habit.v1.HabitService.ArchiveRoutine:output_type -> habit.v1.ArchiveRoutineResponse
+	49, // 49: habit.v1.HabitService.StartRoutine:output_type -> habit.v1.StartRoutineResponse
+	50, // 50: habit.v1.HabitService.EndRoutineRun:output_type -> habit.v1.EndRoutineRunResponse
+	51, // 51: habit.v1.HabitService.LogSession:output_type -> habit.v1.LogSessionResponse
+	52, // 52: habit.v1.HabitService.ListSessions:output_type -> habit.v1.ListSessionsResponse
+	53, // 53: habit.v1.HabitService.UpdateSession:output_type -> habit.v1.UpdateSessionResponse
+	54, // 54: habit.v1.HabitService.DeleteSession:output_type -> habit.v1.DeleteSessionResponse
+	55, // 55: habit.v1.HabitService.GetWeeklyReport:output_type -> habit.v1.GetWeeklyReportResponse
+	56, // 56: habit.v1.HabitService.GetMonthlyReport:output_type -> habit.v1.GetMonthlyReportResponse
+	57, // 57: habit.v1.HabitService.ListProgressionSuggestions:output_type -> habit.v1.ListProgressionSuggestionsResponse
+	29, // [29:58] is the sub-list for method output_type
+	0,  // [0:29] is the sub-list for method input_type
 	0,  // [0:0] is the sub-list for extension type_name
 	0,  // [0:0] is the sub-list for extension extendee
 	0,  // [0:0] is the sub-list for field type_name

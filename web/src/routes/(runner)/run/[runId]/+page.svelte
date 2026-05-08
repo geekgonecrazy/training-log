@@ -7,6 +7,7 @@
   import type { Exercise, Routine, Machine, Difficulty } from '$lib/api/types';
   import { nextItem, previousItem, type ItemRunState, type RunMode } from '$lib/runner/state';
   import { cues, unlockAudio } from '$lib/audio/cues';
+  import { acquireWakeLock } from '$lib/util/wakelock';
   import { uuid } from '$lib/util/uuid';
   import DifficultyButtons from '$lib/components/DifficultyButtons.svelte';
   import RepsStepper from '$lib/components/RepsStepper.svelte';
@@ -33,6 +34,7 @@
   let actualWeight: number | null = null;
   let note = '';
   let loading = true;
+  let wakeLock: { release(): Promise<void> } | null = null;
 
   $: current = cursor >= 0 ? routine?.items[cursor] : null;
   $: currentEx = current ? exercisesById.get(current.exerciseId) : null;
@@ -70,7 +72,11 @@
     loading = false;
   });
 
-  onDestroy(() => { if (timerHandle !== null) clearInterval(timerHandle); });
+  onDestroy(() => {
+    if (timerHandle !== null) clearInterval(timerHandle);
+    void wakeLock?.release();
+    wakeLock = null;
+  });
 
   function presentCursor(i: number) {
     cursor = i;
@@ -102,6 +108,7 @@
     elapsedSec = 0;
     phase = 'running';
     cues.start();
+    if (!wakeLock) wakeLock = acquireWakeLock();
 
     timerHandle = window.setInterval(() => {
       elapsedSec = Math.floor((Date.now() - setStartedAt) / 1000);
@@ -115,9 +122,11 @@
   function finishSet() {
     if (timerHandle !== null) { clearInterval(timerHandle); timerHandle = null; }
     cues.end();
-    // Start at 0 — the user enters what they actually did. "Completed all"
-    // button on the difficulty screen is the one-tap full-credit shortcut.
-    actualCount = 0; // user enters what they actually did; "Completed all" is the shortcut
+    void wakeLock?.release();
+    wakeLock = null;
+    // Pre-fill with the goal so a misclick on difficulty defaults to "completed
+    // all reps" instead of zero. User can step down if they did fewer.
+    actualCount = currentEx?.goalCount ?? 0;
     phase = 'awaiting_difficulty';
   }
 

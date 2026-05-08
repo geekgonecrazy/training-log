@@ -93,6 +93,12 @@ service HabitService {
   rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {
     option (google.api.http) = { get: "/v1/sessions" };
   }
+  rpc UpdateSession(UpdateSessionRequest) returns (UpdateSessionResponse) {
+    option (google.api.http) = { put: "/v1/sessions/{id}" body: "*" };
+  }
+  rpc DeleteSession(DeleteSessionRequest) returns (DeleteSessionResponse) {
+    option (google.api.http) = { delete: "/v1/sessions/{id}" };
+  }
 
   // Reports + progression
   rpc GetWeeklyReport(GetWeeklyReportRequest) returns (GetWeeklyReportResponse) {

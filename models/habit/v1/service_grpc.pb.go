@@ -290,6 +290,8 @@ const (
 	HabitService_EndRoutineRun_FullMethodName              = "/habit.v1.HabitService/EndRoutineRun"
 	HabitService_LogSession_FullMethodName                 = "/habit.v1.HabitService/LogSession"
 	HabitService_ListSessions_FullMethodName               = "/habit.v1.HabitService/ListSessions"
+	HabitService_UpdateSession_FullMethodName              = "/habit.v1.HabitService/UpdateSession"
+	HabitService_DeleteSession_FullMethodName              = "/habit.v1.HabitService/DeleteSession"
 	HabitService_GetWeeklyReport_FullMethodName            = "/habit.v1.HabitService/GetWeeklyReport"
 	HabitService_GetMonthlyReport_FullMethodName           = "/habit.v1.HabitService/GetMonthlyReport"
 	HabitService_ListProgressionSuggestions_FullMethodName = "/habit.v1.HabitService/ListProgressionSuggestions"
@@ -322,6 +324,8 @@ type HabitServiceClient interface {
 	// Sessions
 	LogSession(ctx context.Context, in *LogSessionRequest, opts ...grpc.CallOption) (*LogSessionResponse, error)
 	ListSessions(ctx context.Context, in *ListSessionsRequest, opts ...grpc.CallOption) (*ListSessionsResponse, error)
+	UpdateSession(ctx context.Context, in *UpdateSessionRequest, opts ...grpc.CallOption) (*UpdateSessionResponse, error)
+	DeleteSession(ctx context.Context, in *DeleteSessionRequest, opts ...grpc.CallOption) (*DeleteSessionResponse, error)
 	// Reports + progression
 	GetWeeklyReport(ctx context.Context, in *GetWeeklyReportRequest, opts ...grpc.CallOption) (*GetWeeklyReportResponse, error)
 	GetMonthlyReport(ctx context.Context, in *GetMonthlyReportRequest, opts ...grpc.CallOption) (*GetMonthlyReportResponse, error)
@@ -526,6 +530,26 @@ func (c *habitServiceClient) ListSessions(ctx context.Context, in *ListSessionsR
 	return out, nil
 }
 
+func (c *habitServiceClient) UpdateSession(ctx context.Context, in *UpdateSessionRequest, opts ...grpc.CallOption) (*UpdateSessionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateSessionResponse)
+	err := c.cc.Invoke(ctx, HabitService_UpdateSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *habitServiceClient) DeleteSession(ctx context.Context, in *DeleteSessionRequest, opts ...grpc.CallOption) (*DeleteSessionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteSessionResponse)
+	err := c.cc.Invoke(ctx, HabitService_DeleteSession_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *habitServiceClient) GetWeeklyReport(ctx context.Context, in *GetWeeklyReportRequest, opts ...grpc.CallOption) (*GetWeeklyReportResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetWeeklyReportResponse)
@@ -583,6 +607,8 @@ type HabitServiceServer interface {
 	// Sessions
 	LogSession(context.Context, *LogSessionRequest) (*LogSessionResponse, error)
 	ListSessions(context.Context, *ListSessionsRequest) (*ListSessionsResponse, error)
+	UpdateSession(context.Context, *UpdateSessionRequest) (*UpdateSessionResponse, error)
+	DeleteSession(context.Context, *DeleteSessionRequest) (*DeleteSessionResponse, error)
 	// Reports + progression
 	GetWeeklyReport(context.Context, *GetWeeklyReportRequest) (*GetWeeklyReportResponse, error)
 	GetMonthlyReport(context.Context, *GetMonthlyReportRequest) (*GetMonthlyReportResponse, error)
@@ -652,6 +678,12 @@ func (UnimplementedHabitServiceServer) LogSession(context.Context, *LogSessionRe
 }
 func (UnimplementedHabitServiceServer) ListSessions(context.Context, *ListSessionsRequest) (*ListSessionsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListSessions not implemented")
+}
+func (UnimplementedHabitServiceServer) UpdateSession(context.Context, *UpdateSessionRequest) (*UpdateSessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateSession not implemented")
+}
+func (UnimplementedHabitServiceServer) DeleteSession(context.Context, *DeleteSessionRequest) (*DeleteSessionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteSession not implemented")
 }
 func (UnimplementedHabitServiceServer) GetWeeklyReport(context.Context, *GetWeeklyReportRequest) (*GetWeeklyReportResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetWeeklyReport not implemented")
@@ -1024,6 +1056,42 @@ func _HabitService_ListSessions_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HabitService_UpdateSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HabitServiceServer).UpdateSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HabitService_UpdateSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HabitServiceServer).UpdateSession(ctx, req.(*UpdateSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _HabitService_DeleteSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSessionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HabitServiceServer).DeleteSession(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HabitService_DeleteSession_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HabitServiceServer).DeleteSession(ctx, req.(*DeleteSessionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _HabitService_GetWeeklyReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetWeeklyReportRequest)
 	if err := dec(in); err != nil {
@@ -1160,6 +1228,14 @@ var HabitService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListSessions",
 			Handler:    _HabitService_ListSessions_Handler,
+		},
+		{
+			MethodName: "UpdateSession",
+			Handler:    _HabitService_UpdateSession_Handler,
+		},
+		{
+			MethodName: "DeleteSession",
+			Handler:    _HabitService_DeleteSession_Handler,
 		},
 		{
 			MethodName: "GetWeeklyReport",

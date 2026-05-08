@@ -887,6 +887,74 @@
           "HabitService"
         ]
       }
+    },
+    "/v1/sessions/{id}": {
+      "delete": {
+        "operationId": "HabitService_DeleteSession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1DeleteSessionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      },
+      "put": {
+        "operationId": "HabitService_UpdateSession",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateSessionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/HabitServiceUpdateSessionBody"
+            }
+          }
+        ],
+        "tags": [
+          "HabitService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -962,6 +1030,33 @@
           "type": "boolean"
         }
       }
+    },
+    "HabitServiceUpdateSessionBody": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/v1SessionStatus"
+        },
+        "countCompleted": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "durationSeconds": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "difficulty": {
+          "$ref": "#/definitions/v1Difficulty"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "weightLb": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "description": "UpdateSessionRequest patches an already-logged session. All fields except\n`id` are optional; only fields explicitly set in the request are written.\nThe exercise_id, routine_run_id and client_id of the row never change."
     },
     "protobufAny": {
       "type": "object",
@@ -1089,6 +1184,9 @@
       }
     },
     "v1DeleteMachineResponse": {
+      "type": "object"
+    },
+    "v1DeleteSessionResponse": {
       "type": "object"
     },
     "v1Difficulty": {
@@ -1697,6 +1795,14 @@
       "properties": {
         "routine": {
           "$ref": "#/definitions/v1Routine"
+        }
+      }
+    },
+    "v1UpdateSessionResponse": {
+      "type": "object",
+      "properties": {
+        "session": {
+          "$ref": "#/definitions/v1Session"
         }
       }
     },

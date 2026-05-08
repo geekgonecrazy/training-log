@@ -98,6 +98,87 @@ func (s *sessionStore) List(ctx context.Context, userID int64, f store.SessionFi
 	return out, rows.Err()
 }
 
+func (s *sessionStore) Get(ctx context.Context, userID, id int64) (*store.Session, error) {
+	defer trackDBOp("select", "sessions", "Get")()
+	rows, err := s.db.QueryContext(ctx,
+		`SELECT `+sessionCols+` FROM sessions WHERE user_id = ? AND id = ?`,
+		userID, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	if !rows.Next() {
+		return nil, store.ErrNotFound
+	}
+	return scanSession(rows)
+}
+
+func (s *sessionStore) Update(ctx context.Context, userID, id int64, p store.SessionPatch) (*store.Session, error) {
+	defer trackDBOp("update", "sessions", "Update")()
+	var (
+		sets []string
+		args []any
+	)
+	if p.Status != nil {
+		sets = append(sets, "status = ?")
+		args = append(args, *p.Status)
+	}
+	if p.CountCompleted != nil {
+		sets = append(sets, "count_completed = ?")
+		args = append(args, *p.CountCompleted)
+	}
+	if p.DurationSeconds != nil {
+		sets = append(sets, "duration_seconds = ?")
+		args = append(args, *p.DurationSeconds)
+	}
+	if p.Difficulty != nil {
+		sets = append(sets, "difficulty = ?")
+		args = append(args, *p.Difficulty)
+	}
+	if p.Notes != nil {
+		sets = append(sets, "notes = ?")
+		args = append(args, *p.Notes)
+	}
+	if p.WeightLb != nil {
+		sets = append(sets, "weight_lb = ?")
+		args = append(args, *p.WeightLb)
+	}
+	if len(sets) == 0 {
+		return s.Get(ctx, userID, id)
+	}
+	q := `UPDATE sessions SET ` + strings.Join(sets, ", ") + ` WHERE id = ? AND user_id = ?`
+	args = append(args, id, userID)
+	res, err := s.db.ExecContext(ctx, q, args...)
+	if err != nil {
+		return nil, fmt.Errorf("update session: %w", err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return nil, err
+	}
+	if n == 0 {
+		return nil, store.ErrNotFound
+	}
+	return s.Get(ctx, userID, id)
+}
+
+func (s *sessionStore) Delete(ctx context.Context, userID, id int64) error {
+	defer trackDBOp("delete", "sessions", "Delete")()
+	res, err := s.db.ExecContext(ctx,
+		`DELETE FROM sessions WHERE id = ? AND user_id = ?`, id, userID)
+	if err != nil {
+		return fmt.Errorf("delete session: %w", err)
+	}
+	n, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if n == 0 {
+		return store.ErrNotFound
+	}
+	return nil
+}
+
 func (s *sessionStore) RecentCompletedForExercise(ctx context.Context, userID, exerciseID int64, limit int) ([]*store.Session, error) {
 	defer trackDBOp("select", "sessions", "RecentCompletedForExercise")()
 	if limit <= 0 {

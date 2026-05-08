@@ -6,6 +6,7 @@
   import { logSessionResilient } from '$lib/api/outbox';
   import type { Exercise, Machine, Difficulty } from '$lib/api/types';
   import { cues, unlockAudio } from '$lib/audio/cues';
+  import { acquireWakeLock } from '$lib/util/wakelock';
   import { uuid } from '$lib/util/uuid';
   import DifficultyButtons from '$lib/components/DifficultyButtons.svelte';
   import RepsStepper from '$lib/components/RepsStepper.svelte';
@@ -24,6 +25,7 @@
   let note = '';
   let setStartedAt = 0;
   let timerHandle: number | null = null;
+  let wakeLock: { release(): Promise<void> } | null = null;
 
   onMount(async () => {
     const id = $page.params.id;
@@ -37,7 +39,11 @@
     }
   });
 
-  onDestroy(() => { if (timerHandle !== null) clearInterval(timerHandle); });
+  onDestroy(() => {
+    if (timerHandle !== null) clearInterval(timerHandle);
+    void wakeLock?.release();
+    wakeLock = null;
+  });
 
   function startSet() {
     if (!ex) return;
@@ -46,6 +52,7 @@
     elapsedSec = 0;
     phase = 'running';
     cues.start();
+    if (!wakeLock) wakeLock = acquireWakeLock();
     timerHandle = window.setInterval(() => {
       elapsedSec = Math.floor((Date.now() - setStartedAt) / 1000);
       if (ex?.kind === 'EXERCISE_KIND_TIMED' && ex.goalDurationSeconds &&
@@ -58,7 +65,11 @@
   function finishSet() {
     if (timerHandle !== null) { clearInterval(timerHandle); timerHandle = null; }
     cues.end();
-    actualCount = 0;
+    void wakeLock?.release();
+    wakeLock = null;
+    // Pre-fill with the goal so a misclick on difficulty defaults to "completed
+    // all reps" instead of zero. User can step down if they did fewer.
+    actualCount = ex?.goalCount ?? 0;
     phase = 'awaiting_difficulty';
   }
 

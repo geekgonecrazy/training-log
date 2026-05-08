@@ -181,11 +181,27 @@ type SessionFilter struct {
 	Limit        int32
 }
 
+// SessionPatch captures the fields editable on a logged session. A nil pointer
+// means "leave unchanged"; the zero value of the inner type means "set to that
+// value" (so e.g. *0 reps clears completed count back to zero, while nil keeps
+// the existing value).
+type SessionPatch struct {
+	Status          *int32
+	CountCompleted  *int32
+	DurationSeconds *int32
+	Difficulty      *int32
+	Notes           *string
+	WeightLb        *float64
+}
+
 type SessionStore interface {
 	// Log writes a session, idempotent on (user_id, client_id). If a session
 	// with the same client_id already exists for the user, returns the existing row.
 	Log(ctx context.Context, s *Session) (*Session, error)
 	List(ctx context.Context, userID int64, f SessionFilter) ([]*Session, error)
+	Get(ctx context.Context, userID, id int64) (*Session, error)
+	Update(ctx context.Context, userID, id int64, patch SessionPatch) (*Session, error)
+	Delete(ctx context.Context, userID, id int64) error
 	// RecentForExercise returns the most recent N sessions for an exercise,
 	// newest-first, filtered to completed status. Used by progression.
 	RecentCompletedForExercise(ctx context.Context, userID, exerciseID int64, limit int) ([]*Session, error)

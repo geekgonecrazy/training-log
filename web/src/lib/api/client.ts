@@ -4,6 +4,11 @@
 // automatically. On 401 we transparently call /v1/auth/refresh once and retry.
 // A second 401 throws an UnauthenticatedError which the auth store turns into
 // a redirect to /login.
+//
+// The refresh-on-401 dance is skipped for /v1/auth/refresh and /v1/auth/login
+// themselves (avoids recursion + a doomed retry on bad creds), but is still
+// applied to /v1/auth/me — that's the call that wakes the SPA up after the
+// 15-minute access token has expired.
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string, message: string) {
@@ -56,7 +61,8 @@ export async function api<T>(path: string, opts: RequestOptions = {}): Promise<T
 
   let res = await fetch(path, init);
 
-  if (res.status === 401 && !opts.skipAuthRefresh && !path.startsWith('/v1/auth/')) {
+  const isRefreshOrLogin = path === '/v1/auth/refresh' || path === '/v1/auth/login';
+  if (res.status === 401 && !opts.skipAuthRefresh && !isRefreshOrLogin) {
     const ok = await refreshOnce();
     if (ok) {
       res = await fetch(path, init);
