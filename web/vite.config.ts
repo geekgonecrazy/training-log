@@ -38,7 +38,24 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2,mp3,ogg}'],
         navigateFallback: '/',
-        navigateFallbackDenylist: [/^\/v1\//]
+        navigateFallbackDenylist: [/^\/v1\//],
+        // NetworkFirst-cache GET /v1/* so reads work offline. Sessions writes
+        // already go through the Dexie outbox; this layer just keeps the SPA
+        // alive on iOS PWA resume when TLS is briefly unhappy. Only 200s get
+        // cached, so a 401 still propagates to the client (and triggers the
+        // refresh dance + login redirect when actually unauthenticated).
+        runtimeCaching: [
+          {
+            urlPattern: /\/v1\//,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-v1',
+              networkTimeoutSeconds: 3,
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 7 },
+              cacheableResponse: { statuses: [200] }
+            }
+          }
+        ]
       }
     })
   ],
