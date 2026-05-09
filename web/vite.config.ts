@@ -39,6 +39,14 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,png,webp,woff2,mp3,ogg}'],
         navigateFallback: '/',
         navigateFallbackDenylist: [/^\/v1\//],
+        // adapter-static writes index.html *after* vite-pwa builds the
+        // precache manifest, so the SPA shell ('/') is missing from it. The
+        // navigation fallback handler then throws non-precached-url. Add it
+        // explicitly with a per-build revision so the new SW re-fetches the
+        // shell when we deploy.
+        additionalManifestEntries: [
+          { url: '/', revision: `${Date.now()}` }
+        ],
         // NetworkFirst-cache GET /v1/* so reads work offline. Sessions writes
         // already go through the Dexie outbox; this layer just keeps the SPA
         // alive on iOS PWA resume when TLS is briefly unhappy. Only 200s get
