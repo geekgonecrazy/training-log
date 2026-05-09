@@ -25,10 +25,15 @@
   let editError = '';
 
   // Trends range selector.
-  type RangeKey = '3m' | '6m' | '12m';
-  let range: RangeKey = '3m';
-  const RANGE_DAYS: Record<RangeKey, number> = { '3m': 90, '6m': 180, '12m': 365 };
-  const RANGES: RangeKey[] = ['3m', '6m', '12m'];
+  type RangeKey = '1w' | '2w' | '1m';
+  let range: RangeKey = '1w';
+  const RANGE_DAYS: Record<RangeKey, number> = { '1w': 7, '2w': 14, '1m': 30 };
+  const RANGES: RangeKey[] = ['1w', '2w', '1m'];
+  const RANGE_LABELS: Record<RangeKey, string> = {
+    '1w': '1 Week',
+    '2w': '2 Weeks',
+    '1m': '1 Month'
+  };
 
   // Single-series isolation: clicking a legend entry shows just that one;
   // clicking it again (or "Show all") clears.
@@ -254,7 +259,7 @@
               on:click={() => (range = r)}
               role="tab"
               aria-selected={range === r}
-            >{r === '3m' ? '3 Months' : r === '6m' ? '6 Months' : '12 Months'}</button>
+            >{RANGE_LABELS[r]}</button>
           {/each}
         </div>
       </div>
