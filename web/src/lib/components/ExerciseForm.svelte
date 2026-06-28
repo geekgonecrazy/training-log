@@ -11,7 +11,13 @@
   let kind: ExerciseKind = (initial.kind as ExerciseKind) ?? 'EXERCISE_KIND_COUNTED';
   let machineId: string = initial.machineId ?? '';
   let goalCount: number | null = initial.goalCount ?? null;
-  let goalDurationSeconds: number | null = initial.goalDurationSeconds ?? null;
+  // Durations are stored as seconds, but entered in seconds or minutes. Default to
+  // minutes for clean whole-minute goals (e.g. a 30-minute walk → 1800s).
+  const initDurationSecs = initial.goalDurationSeconds ?? null;
+  let durationUnit: 'sec' | 'min' =
+    initDurationSecs != null && initDurationSecs >= 60 && initDurationSecs % 60 === 0 ? 'min' : 'sec';
+  let durationValue: number | null =
+    initDurationSecs == null ? null : durationUnit === 'min' ? initDurationSecs / 60 : initDurationSecs;
   let goalSets: number | null = initial.goalSets ?? 1;
   let goalWeightLb: number | null = initial.goalWeightLb ?? null;
   let instructions = initial.instructions ?? '';
@@ -31,7 +37,8 @@
       const payload: ExerciseInput = { name, kind, instructions };
       if (machineId) payload.machineId = machineId;
       if (hasReps && goalCount !== null) payload.goalCount = goalCount;
-      if (hasDuration && goalDurationSeconds !== null) payload.goalDurationSeconds = goalDurationSeconds;
+      if (hasDuration && durationValue !== null && durationValue > 0)
+        payload.goalDurationSeconds = Math.round(durationUnit === 'min' ? durationValue * 60 : durationValue);
       if (hasSets && goalSets !== null && goalSets > 0) payload.goalSets = goalSets;
       if (hasWeight && goalWeightLb !== null) payload.goalWeightLb = goalWeightLb;
       await onSubmit(payload);
@@ -75,8 +82,21 @@
 
   {#if hasDuration}
     <div class="field">
-      <label for="goalDuration">Seconds per set</label>
-      <input id="goalDuration" type="number" min="1" bind:value={goalDurationSeconds} placeholder="30" />
+      <label for="goalDuration">Duration per set</label>
+      <div class="row" style="gap: 0.5rem;">
+        <input
+          id="goalDuration"
+          type="number"
+          min="1"
+          step={durationUnit === 'min' ? '0.5' : '1'}
+          bind:value={durationValue}
+          placeholder="30"
+        />
+        <select bind:value={durationUnit} aria-label="Duration unit" style="width: auto;">
+          <option value="sec">seconds</option>
+          <option value="min">minutes</option>
+        </select>
+      </div>
     </div>
   {/if}
 

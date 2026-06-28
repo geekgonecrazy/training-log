@@ -4,6 +4,7 @@
   import Icon from '$lib/components/Icon.svelte';
   import { reports } from '$lib/api/endpoints';
   import type { PeriodReport } from '$lib/api/types';
+  import { formatDuration } from '$lib/util/format';
 
   let mode: 'weekly' | 'monthly' = 'weekly';
   let report: PeriodReport | null = null;
@@ -70,7 +71,7 @@
             </div>
             <div class="row tabular" style="margin-top: 0.5rem; font-size: 0.95rem;">
               {#if r.totalCount > 0}<span><strong>{r.totalCount}</strong> <span class="muted">reps</span></span>{/if}
-              {#if r.totalDurationSeconds > 0}<span><strong>{r.totalDurationSeconds}</strong><span class="muted">s</span></span>{/if}
+              {#if r.totalDurationSeconds > 0}<span><strong>{formatDuration(r.totalDurationSeconds)}</strong></span>{/if}
             </div>
           </div>
         {/each}

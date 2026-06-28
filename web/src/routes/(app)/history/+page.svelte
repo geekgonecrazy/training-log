@@ -6,6 +6,7 @@
   import type { Series } from '$lib/components/LineChart';
   import { sessions as sessionsApi, exercises as exApi } from '$lib/api/endpoints';
   import type { Session, Exercise, Difficulty, SessionStatus } from '$lib/api/types';
+  import { formatDuration } from '$lib/util/format';
 
   let items: Session[] = [];
   let exById: Map<string, Exercise> = new Map();
@@ -218,7 +219,7 @@
           const [y, mo, d] = key.split('-').map(Number);
           const x = new Date(y, mo - 1, d, 12, 0, 0).getTime();
           const avg = b.sum / b.count;
-          return { x, y: avg, label: `${fmtSecs(avg)} (n=${b.count})` };
+          return { x, y: avg, label: `${formatDuration(avg)} (n=${b.count})` };
         })
         .sort((a, b) => a.x - b.x);
       out.push({
@@ -231,12 +232,6 @@
     return out;
   })();
 
-  function fmtSecs(secs: number): string {
-    if (secs < 60) return `${Math.round(secs)}s`;
-    const m = Math.floor(secs / 60);
-    const s = Math.round(secs % 60);
-    return s === 0 ? `${m}m` : `${m}m ${s}s`;
-  }
 </script>
 
 <div class="app-shell">
@@ -267,7 +262,7 @@
         series={trendSeries}
         xRange={[from, now]}
         yLabel="seconds"
-        yFormat={fmtSecs}
+        yFormat={formatDuration}
         isolatedName={isolatedSeries}
         on:legendClick={onLegendClick}
       />
@@ -303,7 +298,7 @@
 
             {#if ex?.kind === 'EXERCISE_KIND_TIMED'}
               <div class="field">
-                <label>Duration (seconds){ex?.goalDurationSeconds ? ` (goal ${ex.goalDurationSeconds}s)` : ''}</label>
+                <label>Duration (seconds){ex?.goalDurationSeconds ? ` (goal ${formatDuration(ex.goalDurationSeconds)})` : ''}</label>
                 <input type="number" min="0" bind:value={draft.durationSeconds} placeholder="—" />
               </div>
             {/if}
@@ -373,7 +368,7 @@
             <div class="tabular" style="font-size: 0.9rem; margin-top: 0.4rem;">
               {#if s.setIndex && s.setTotal}Set {s.setIndex}/{s.setTotal} · {/if}
               {#if s.countCompleted !== undefined}{s.countCompleted}{#if s.countGoal} / {s.countGoal}{/if} reps{/if}
-              {#if s.durationSeconds !== undefined}{s.countCompleted !== undefined ? ' · ' : ''}{s.durationSeconds}s{/if}
+              {#if s.durationSeconds !== undefined}{s.countCompleted !== undefined ? ' · ' : ''}{formatDuration(s.durationSeconds)}{/if}
               {#if s.weightLb !== undefined} @ {s.weightLb} lb{/if}
               {#if s.difficulty}· {s.difficulty.replace('DIFFICULTY_', '').toLowerCase()}{/if}
             </div>
